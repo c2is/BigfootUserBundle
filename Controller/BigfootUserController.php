@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Bigfoot\Bundle\CoreBundle\Theme\Menu\Item;
 use Bigfoot\Bundle\UserBundle\Entity\BigfootUser;
 use Bigfoot\Bundle\UserBundle\Form\BigfootUserType;
 
@@ -30,6 +31,8 @@ class BigfootUserController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('BigfootUserBundle:BigfootUser')->findAll();
+
+        $this->container->get('bigfoot.theme')['page_content']['globalActions']->addItem(new Item('crud_add', 'Add a user', 'admin_user_new'));
 
         return array(
             'entities' => $entities,

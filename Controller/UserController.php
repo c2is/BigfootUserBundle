@@ -9,10 +9,15 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+/**
+ * BigfootUser controller.
+ *
+ * @Route("/admin/user")
+ */
 class UserController extends ContainerAware
 {
     /**
-     * @Route("/user/account", name="user_account")
+     * @Route("/account", name="user_account")
      * @Template("BigfootUserBundle::account.html.twig")
      */
     public function accountAction()

@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Bigfoot\Bundle\CoreBundle\Theme\Menu\Item;
 use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
 use Bigfoot\Bundle\UserBundle\Form\BigfootRoleType;
 
@@ -30,6 +31,8 @@ class BigfootRoleController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('BigfootUserBundle:BigfootRole')->findAll();
+
+        $this->container->get('bigfoot.theme')['page_content']['globalActions']->addItem(new Item('crud_add', 'Add a role', 'admin_role_new'));
 
         return array(
             'entities' => $entities,

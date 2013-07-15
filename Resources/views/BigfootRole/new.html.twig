@@ -1,20 +1,10 @@
 {% extends 'BigfootCoreBundle::base.html.twig' %}
 
-{% block body -%}
-    <h1>BigfootRole creation</h1>
-
-    <form action="{{ path('admin_role_create') }}" method="post" {{ form_enctype(form) }}>
-        {{ form_widget(form) }}
-        <p>
-            <button type="submit">Create</button>
-        </p>
-    </form>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_role') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% block body %}
+    {% include 'BigfootCoreBundle:crud:form.html.twig' with {
+        'action_route': path('admin_role_create'),
+        'action_name': 'Create',
+        'form_title': 'Role creation',
+        'cancel_route': 'admin_role'
+    } %}
 {% endblock %}
