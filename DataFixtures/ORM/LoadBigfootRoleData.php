@@ -15,14 +15,17 @@ class LoadBigfootRoleData implements FixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $roleAdmin = new BigfootRole();
-        $roleAdmin
-            ->setName('ROLE_ADMIN');
+        $roleRespository = $manager->getRepository('BigfootUserBundle:BigfootRole');
+        $roleAdmin = $roleRespository->findOneBy(array('name' => 'ROLE_ADMIN'));
 
+        if (!$roleAdmin) {
+            $roleAdmin = new BigfootRole();
+            $roleAdmin->setName('ROLE_ADMIN');
+            $manager->persist($roleAdmin);
+        }
 
         $roleUser = new BigfootRole();
-        $roleUser
-            ->setName('ROLE_USER');
+        $roleUser->setName('ROLE_USER');
 
         $manager->persist($roleAdmin);
         $manager->persist($roleUser);

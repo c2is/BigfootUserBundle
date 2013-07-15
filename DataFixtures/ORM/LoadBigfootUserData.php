@@ -2,9 +2,11 @@
 
 namespace Bigfoot\Bundle\UserBundle\DataFixtures\ORM;
 
-use Bigfoot\Bundle\UserBundle\Entity\BigfootUser;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+
+use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
+use Bigfoot\Bundle\UserBundle\Entity\BigfootUser;
 
 class LoadBigfootUserData implements FixtureInterface
 {
@@ -17,6 +19,12 @@ class LoadBigfootUserData implements FixtureInterface
     {
         $roleRespository = $manager->getRepository('BigfootUserBundle:BigfootRole');
         $roleAdmin = $roleRespository->findOneBy(array('name' => 'ROLE_ADMIN'));
+
+        if (!$roleAdmin) {
+            $roleAdmin = new BigfootRole();
+            $roleAdmin->setName('ROLE_ADMIN');
+            $manager->persist($roleAdmin);
+        }
 
         $userAdmin = new BigfootUser();
         $userAdmin
