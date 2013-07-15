@@ -1,0 +1,10 @@
+services:
+    kernel.listener.bigfoot_user_menu_listener:
+        class: Bigfoot\Bundle\UserBundle\Listener\MenuListener
+        tags:
+            - { name: kernel.event_listener, event: bigfoot.menu.generate, method: onMenuGenerate }
+    form.type.user:
+        class: Bigfoot\Bundle\UserBundle\Form\BigfootUserType
+        arguments: [ @security.encoder_factory ]
+        tags:
+            - { name: form.type, alias: bigfoot_user }

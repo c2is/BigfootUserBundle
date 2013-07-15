@@ -1,0 +1,36 @@
+<?php
+
+namespace Bigfoot\Bundle\UserBundle\DataFixtures\ORM;
+
+use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+
+class LoadBigfootRoleData implements FixtureInterface
+{
+    /**
+     * Load data fixtures with the passed EntityManager
+     *
+     * @param Doctrine\Common\Persistence\ObjectManager $manager
+     */
+    public function load(ObjectManager $manager)
+    {
+        $roleAdmin = new BigfootRole();
+        $roleAdmin
+            ->setName('ROLE_ADMIN');
+
+
+        $roleUser = new BigfootRole();
+        $roleUser
+            ->setName('ROLE_USER');
+
+        $manager->persist($roleAdmin);
+        $manager->persist($roleUser);
+        $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 5;
+    }
+}
