@@ -10,7 +10,7 @@ use Serializable;
 /**
  * BigfootRole
  *
- * @ORM\Table()
+ * @ORM\Table(name="bigfoot_role")
  * @ORM\Entity(repositoryClass="Bigfoot\Bundle\UserBundle\Entity\BigfootRoleRepository")
  */
 class BigfootRole implements RoleInterface, Serializable
@@ -30,6 +30,13 @@ class BigfootRole implements RoleInterface, Serializable
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="label", type="string", length=255)
+     */
+    private $label;
 
     /**
      * @ORM\ManyToMany(targetEntity="BigfootUser", mappedBy="userRoles")
@@ -68,6 +75,29 @@ class BigfootRole implements RoleInterface, Serializable
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return BigfootRole
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 
     /**

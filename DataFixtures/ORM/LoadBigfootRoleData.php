@@ -21,10 +21,12 @@ class LoadBigfootRoleData implements FixtureInterface
         if (!$roleAdmin) {
             $roleAdmin = new BigfootRole();
             $roleAdmin->setName('ROLE_ADMIN');
+            $roleAdmin->setLabel('Administrator');
         }
 
         $roleUser = new BigfootRole();
         $roleUser->setName('ROLE_USER');
+        $roleUser->setLabel('User');
 
         $manager->persist($roleAdmin);
         $manager->persist($roleUser);

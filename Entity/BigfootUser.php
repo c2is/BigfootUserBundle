@@ -12,7 +12,7 @@ use Serializable;
 /**
  * BigfootUser
  *
- * @ORM\Table()
+ * @ORM\Table(name="bigfoot_user")
  * @ORM\Entity(repositoryClass="Bigfoot\Bundle\UserBundle\Entity\BigfootUserRepository")
  */
 class BigfootUser extends BaseUser implements Serializable
