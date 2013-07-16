@@ -62,6 +62,13 @@ class BigfootUser extends BaseUser implements Serializable
     private $salt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="locale", type="string", length=6)
+     */
+    private $locale;
+
+    /**
      * @ORM\ManyToMany(targetEntity="BigfootRole", inversedBy="users")
      * @ORM\JoinTable(name="bigfoot_userRoles")
      */
@@ -203,6 +210,29 @@ class BigfootUser extends BaseUser implements Serializable
     }
 
     /**
+     * Set locale
+     *
+     * @param string $locale
+     * @return BigfootUser
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
      * Set User Roles
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $roles
@@ -286,6 +316,7 @@ class BigfootUser extends BaseUser implements Serializable
             $this->username,
             $this->salt,
             $this->password,
+            $this->locale,
         ));
     }
 
@@ -305,6 +336,7 @@ class BigfootUser extends BaseUser implements Serializable
             $this->username,
             $this->salt,
             $this->password,
+            $this->locale,
         ) = unserialize($serialized);
     }
 }

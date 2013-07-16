@@ -30,6 +30,9 @@ class BigfootUserType extends AbstractType
             ->add('email')
             ->add('full_name')
             ->add('salt', 'hidden')
+            ->add('locale', 'choice', array(
+                'choices' => array('fr' => 'fr', 'en' => 'en')
+            ))
             ->add('password', 'password', array(
                 'required' => false,
             ))
@@ -55,7 +58,7 @@ class BigfootUserType extends AbstractType
                 }
 
                 $event->setData($data);
-            });
+            })
         ;
     }
 

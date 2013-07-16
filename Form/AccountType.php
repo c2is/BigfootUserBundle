@@ -27,6 +27,9 @@ class AccountType extends AbstractType
             ->add('username')
             ->add('email')
             ->add('full_name')
+            ->add('locale', 'choice', array(
+                'choices' => array('fr' => 'fr', 'en' => 'en')
+            ))
             ->add('password', 'password', array(
                 'required' => false,
             ))

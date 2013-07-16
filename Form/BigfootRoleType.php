@@ -12,6 +12,7 @@ class BigfootRoleType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('label')
         ;
     }
 

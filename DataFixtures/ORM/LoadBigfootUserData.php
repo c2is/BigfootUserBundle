@@ -33,6 +33,7 @@ class LoadBigfootUserData implements FixtureInterface
             ->setSalt('')
             ->setFullname('Administrator')
             ->setEmail('admin@c2is.fr')
+            ->setLocale('en')
             ->addUserRole($roleAdmin);
 
         $manager->persist($userAdmin);

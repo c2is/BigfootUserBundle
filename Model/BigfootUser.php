@@ -59,4 +59,11 @@ abstract class BigfootUser implements UserInterface
      * @return void
      */
     abstract public function eraseCredentials();
+
+    /**
+     * Default locale for the user.
+     *
+     * @return string The locale
+     */
+    abstract public function getLocale();
 }

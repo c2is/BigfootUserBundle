@@ -1,4 +1,4 @@
-{% extends 'BigfootCoreBundle::base.html.twig' %}
+{% extends '::base.html.twig' %}
 
 {% block body %}
     {% include 'BigfootCoreBundle:crud:form.html.twig' with {
@@ -6,6 +6,7 @@
         'action_name': 'Edit',
         'form_title': 'User edit',
         'cancel_route': 'admin_user',
-        'form': edit_form
+        'form': edit_form,
+        'method': 'PUT'
     } %}
 {% endblock %}
