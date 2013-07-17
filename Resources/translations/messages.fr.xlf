@@ -66,6 +66,10 @@
                 <source>Role edit</source>
                 <target>Modification d'un groupe d'utilisateurs</target>
             </trans-unit>
+            <trans-unit id="17">
+                <source>My account</source>
+                <target>Mon compte</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
