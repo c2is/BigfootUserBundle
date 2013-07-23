@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>{{ app.config_core.sitename|default('Log into your back office') }}</title>
+    <title>{{ bigfoot_theme_values.title }}</title>
 
     <link rel="stylesheet" href="{{ asset('bundles/bigfootcore/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('bundles/bigfootcore/css/font-awesome.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('bundles/bigfootcore/css/jqtree.css') }}" />
     <link rel="stylesheet" href="{{ asset('bundles/bigfootcore/css/screen.css') }}" />
 </head>
 <body>
@@ -14,7 +13,7 @@
     <div class="content">
         <div class="row">
             <div class="login-form">
-                <h2>Login</h2>
+                <h2>{{ 'Login' | trans }}</h2>
                 <form action="{{ path('admin_login_check') }}" method="post">
                     <fieldset>
                         {% if error %}
@@ -26,7 +25,7 @@
                         <div class="clearfix">
                             <input type="password" name="_password" value="" placeholder="Password">
                         </div>
-                        <button class="btn primary" type="submit">Login</button>
+                        <button class="btn primary" type="submit">{{ 'Login' | trans }}</button>
                     </fieldset>
                 </form>
             </div>

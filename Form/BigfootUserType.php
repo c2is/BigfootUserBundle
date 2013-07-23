@@ -37,6 +37,7 @@ class BigfootUserType extends AbstractType
                 'required' => false,
             ))
             ->add('userRoles')
+            ->add('media', 'bigfoot_media', array('mapped' => false))
             ->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($factory) {
                 $data = $event->getData();
                 $form = $event->getForm();
