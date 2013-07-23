@@ -2,7 +2,7 @@
 
 {% block body -%}
     {% include 'BigfootCoreBundle:crud:form.html.twig' with {
-    'action_route': path('admin_user_update', { 'id': user.id }),
+    'action_route': path('user_account_edit'),
     'action_name': 'Edit',
     'form_title': 'My account',
     'form': edit_form,
