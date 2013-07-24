@@ -32,7 +32,8 @@ class BigfootUserController extends Controller
 
         $entities = $em->getRepository('BigfootUserBundle:BigfootUser')->findAll();
 
-        $this->container->get('bigfoot.theme')['page_content']['globalActions']->addItem(new Item('crud_add', 'Add a user', 'admin_user_new'));
+        $theme = $this->container->get('bigfoot.theme');
+        $theme['page_content']['globalActions']->addItem(new Item('crud_add', 'Add a user', 'admin_user_new'));
 
         return array(
             'entities' => $entities,

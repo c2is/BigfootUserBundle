@@ -32,7 +32,8 @@ class BigfootRoleController extends Controller
 
         $entities = $em->getRepository('BigfootUserBundle:BigfootRole')->findAll();
 
-        $this->container->get('bigfoot.theme')['page_content']['globalActions']->addItem(new Item('crud_add', 'Add a role', 'admin_role_new'));
+        $theme = $this->container->get('bigfoot.theme');
+        $theme['page_content']['globalActions']->addItem(new Item('crud_add', 'Add a role', 'admin_role_new'));
 
         return array(
             'entities' => $entities,
