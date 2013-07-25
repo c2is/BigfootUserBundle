@@ -24,5 +24,6 @@ class KernelListener
             $locale = $user->getLocale();
         }
         $event->getRequest()->setLocale($locale);
+        $this->container->get('gedmo.listener.translatable')->setTranslatableLocale($locale);
     }
 }
