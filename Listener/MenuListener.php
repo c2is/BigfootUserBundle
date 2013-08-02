@@ -11,7 +11,7 @@ class MenuListener
     {
         $menu = $event->getMenu();
         if ('toolbar_menu' == $menu->getName()) {
-            $menu->addItem(new Item('toolbar_user_settings', 'Settings', 'user_account', array(), null, 'cogs'));
+            $menu->addItem(new Item('toolbar_user_settings', 'Settings', 'user_account', array(), null, 'settings'));
             $menu->addItem(new Item('toolbar_user_logout', 'Logout', 'admin_logout', array(), null, 'off'));
         }
         if ('sidebar_menu' == $menu->getName()) {

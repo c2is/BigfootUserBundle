@@ -19,13 +19,13 @@
                         {% if error %}
                             <div>{{ error.message }}</div>
                         {% endif %}
-                        <div class="clearfix">
-                            <input type="text" name="_username" value="{{ last_username }}" placeholder="Username">
+                        <div class="form-group">
+                            <input type="text" name="_username" value="{{ last_username }}" placeholder="Username" class="form-control">
                         </div>
-                        <div class="clearfix">
-                            <input type="password" name="_password" value="" placeholder="Password">
+                        <div class="form-group">
+                            <input type="password" name="_password" value="" placeholder="Password" class="form-control">
                         </div>
-                        <button class="btn primary" type="submit">{{ 'Login' | trans }}</button>
+                        <button class="btn btn-primary" type="submit">{{ 'Login' | trans }}</button>
                     </fieldset>
                 </form>
             </div>
