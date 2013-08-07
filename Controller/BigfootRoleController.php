@@ -3,67 +3,60 @@
 namespace Bigfoot\Bundle\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Bigfoot\Bundle\CoreBundle\Crud\CrudController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Bigfoot\Bundle\CoreBundle\Theme\Menu\Item;
-use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
-use Bigfoot\Bundle\UserBundle\Form\BigfootRoleType;
 
 /**
  * BigfootRole controller.
  *
  * @Route("/admin/role")
  */
-class BigfootRoleController extends Controller
+class BigfootRoleController extends CrudController
 {
+    /**
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'admin_role';
+    }
 
+    /**
+     * @return string
+     */
+    protected function getEntity()
+    {
+        return 'BigfootUserBundle:BigfootRole';
+    }
+
+    protected function getFields()
+    {
+        return array('id' => 'ID', 'name' => 'Name', 'label' => 'Label');
+    }
     /**
      * Lists all BigfootRole entities.
      *
      * @Route("/", name="admin_role")
      * @Method("GET")
-     * @Template()
+     * @Template("BigfootCoreBundle:crud:index.html.twig")
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('BigfootUserBundle:BigfootRole')->findAll();
-
-        $theme = $this->container->get('bigfoot.theme');
-        $theme['page_content']['globalActions']->addItem(new Item('crud_add', 'Add a role', 'admin_role_new'));
-
-        return array(
-            'entities' => $entities,
-        );
+        return $this->doIndex();
     }
     /**
      * Creates a new BigfootRole entity.
      *
      * @Route("/", name="admin_role_create")
      * @Method("POST")
-     * @Template("BigfootUserBundle:BigfootRole:new.html.twig")
+     * @Template("BigfootCoreBundle:crud:new.html.twig")
      */
     public function createAction(Request $request)
     {
-        $entity  = new BigfootRole();
-        $form = $this->createForm(new BigfootRoleType(), $entity);
-        $form->bind($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('admin_role_edit', array('id' => $entity->getId())));
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
+        return $this->doCreate($request);
     }
 
     /**
@@ -71,17 +64,12 @@ class BigfootRoleController extends Controller
      *
      * @Route("/new", name="admin_role_new")
      * @Method("GET")
-     * @Template()
+     * @Template("BigfootCoreBundle:crud:new.html.twig")
      */
     public function newAction()
     {
-        $entity = new BigfootRole();
-        $form   = $this->createForm(new BigfootRoleType(), $entity);
 
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
+        return $this->doNew();
     }
 
     /**
@@ -89,26 +77,12 @@ class BigfootRoleController extends Controller
      *
      * @Route("/{id}/edit", name="admin_role_edit")
      * @Method("GET")
-     * @Template()
+     * @Template("BigfootCoreBundle:crud:edit.html.twig")
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BigfootUserBundle:BigfootRole')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find BigfootRole entity.');
-        }
-
-        $editForm = $this->createForm(new BigfootRoleType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
+        return $this->doEdit($id);
     }
 
     /**
@@ -116,34 +90,12 @@ class BigfootRoleController extends Controller
      *
      * @Route("/{id}", name="admin_role_update")
      * @Method("PUT")
-     * @Template("BigfootUserBundle:BigfootRole:edit.html.twig")
+     * @Template("BigfootCoreBundle:crud:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BigfootUserBundle:BigfootRole')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find BigfootRole entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new BigfootRoleType(), $entity);
-        $editForm->bind($request);
-
-        if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('admin_role_edit', array('id' => $id)));
-        }
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
+        return $this->doUpdate($request, $id);
     }
     /**
      * Deletes a BigfootRole entity.
@@ -153,36 +105,7 @@ class BigfootRoleController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->bind($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('BigfootUserBundle:BigfootRole')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find BigfootRole entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('admin_role'));
-    }
-
-    /**
-     * Creates a form to delete a BigfootRole entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
-    }
+    return $this->doDelete($request, $id);
+}
 }
