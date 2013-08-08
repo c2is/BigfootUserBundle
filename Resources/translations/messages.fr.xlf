@@ -59,16 +59,24 @@
                 <target>Ajouter un groupe</target>
             </trans-unit>
             <trans-unit id="15">
-                <source>Role creation</source>
+                <source>User role creation</source>
                 <target>Création d'un groupe d'utilisateurs</target>
             </trans-unit>
             <trans-unit id="16">
-                <source>Role edit</source>
+                <source>User role edit</source>
                 <target>Modification d'un groupe d'utilisateurs</target>
             </trans-unit>
             <trans-unit id="17">
                 <source>My account</source>
                 <target>Mon compte</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>Users admin</source>
+                <target>Administration des utilisateurs</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>User roles admin</source>
+                <target>Administration des groupes d'utilisateurs</target>
             </trans-unit>
         </body>
     </file>
