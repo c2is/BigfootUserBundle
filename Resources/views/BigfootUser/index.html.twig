@@ -1,0 +1,9 @@
+{% extends bigfoot_theme_values.bundle~'::base.html.twig' %}
+
+{% block body %}
+    {% include 'BigfootCoreBundle:crud:list.html.twig' with {
+        'action_edit': 'admin_user_edit',
+        'list_title': 'Users',
+        'fieldsList': {id: 'ID', username: 'Username'}
+    } %}
+{% endblock %}

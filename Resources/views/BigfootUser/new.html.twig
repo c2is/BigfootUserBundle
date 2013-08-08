@@ -1,0 +1,10 @@
+{% extends bigfoot_theme_values.bundle~'::base.html.twig' %}
+
+{% block body %}
+    {% include 'BigfootCoreBundle:crud:form.html.twig' with {
+        'action_route': path('admin_user_create'),
+        'action_name': 'Create',
+        'form_title': 'User creation',
+        'cancel_route': 'admin_user'
+    } %}
+{% endblock %}

@@ -18,6 +18,7 @@ class MenuListener
             $menu->addItem(new Item('sidebar_user', 'User management', 'admin_user', array(), null, 'user'));
             $userMenu = new Item('sidebar_settings_user', 'User management');
             $userMenu->addChild(new Item('sidebar_settings_role', 'Role management', 'admin_role'));
+            $userMenu->addChild(new Item('sidebar_settings_role_menu', 'Menu role management', 'admin_role_menu'));
             $menu->addOnItem('sidebar_settings', $userMenu);
         }
     }

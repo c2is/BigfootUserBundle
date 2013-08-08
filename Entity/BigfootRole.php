@@ -4,7 +4,6 @@ namespace Bigfoot\Bundle\UserBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 
 use Serializable;
@@ -36,7 +35,6 @@ class BigfootRole implements RoleInterface, Serializable
     /**
      * @var string
      *
-     * @Gedmo\Translatable
      * @ORM\Column(name="label", type="string", length=255)
      */
     private $label;
@@ -46,10 +44,6 @@ class BigfootRole implements RoleInterface, Serializable
      */
     private $users;
 
-    /**
-     * @Gedmo\Locale
-     */
-    private $locale;
 
     /**
      * Get id
@@ -147,7 +141,7 @@ class BigfootRole implements RoleInterface, Serializable
 
     public function __toString()
     {
-        return $this->label;
+        return $this->name;
     }
 
     /**
@@ -179,13 +173,5 @@ class BigfootRole implements RoleInterface, Serializable
             $this->id,
             $this->name,
             ) = unserialize($serialized);
-    }
-
-    /**
-     * @param $locale
-     */
-    public function setTranslatableLocale($locale)
-    {
-        $this->locale = $locale;
     }
 }

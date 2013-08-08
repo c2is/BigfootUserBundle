@@ -13,7 +13,6 @@ class BigfootRoleType extends AbstractType
         $builder
             ->add('name')
             ->add('label')
-            ->add('translation', 'translatable_entity')
         ;
     }
 

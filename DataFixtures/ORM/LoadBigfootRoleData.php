@@ -28,10 +28,6 @@ class LoadBigfootRoleData implements FixtureInterface
         $roleUser->setName('ROLE_USER');
         $roleUser->setLabel('User');
 
-        $repository = $manager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
-        $repository->translate($roleAdmin, 'label', 'fr', 'Administrateur');
-        $repository->translate($roleUser, 'label', 'fr', 'Utilisateur');
-
         $manager->persist($roleAdmin);
         $manager->persist($roleUser);
         $manager->flush();
