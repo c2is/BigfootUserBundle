@@ -70,6 +70,14 @@
                 <source>My account</source>
                 <target>Mon compte</target>
             </trans-unit>
+            <trans-unit id="18">
+                <source>Users admin</source>
+                <target>Administration des utilisateurs</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>User roles admin</source>
+                <target>Administration des groupes d'utilisateurs</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
