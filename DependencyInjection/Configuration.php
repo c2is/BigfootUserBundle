@@ -27,6 +27,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('class')->defaultValue('Bigfoot\\Bundle\\UserBundle\\Model\\User')->end()
                     ->end()
                 ->end()
+                ->arrayNode('menu_security')
+                    ->prototype('array')
+                        ->prototype('scalar')
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
