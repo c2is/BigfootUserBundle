@@ -31,9 +31,14 @@ class BigfootRoleController extends CrudController
         return 'BigfootUserBundle:BigfootRole';
     }
 
+    protected function getEntityLabel()
+    {
+        return 'User role';
+    }
+
     protected function getFields()
     {
-        return array('id' => 'ID', 'name' => 'Name', 'label' => 'Label');
+        return array('id' => 'ID', 'label' => 'Label');
     }
     /**
      * Lists all BigfootRole entities.

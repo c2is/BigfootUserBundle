@@ -40,6 +40,12 @@ class BigfootUserController extends CrudController
     {
         return 'bigfoot_user';
     }
+
+    protected function getEntityLabel()
+    {
+        return 'User';
+    }
+
     /**
      * Lists all BigfootUser entities.
      *

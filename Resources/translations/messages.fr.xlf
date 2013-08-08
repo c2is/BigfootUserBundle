@@ -59,11 +59,11 @@
                 <target>Ajouter un groupe</target>
             </trans-unit>
             <trans-unit id="15">
-                <source>Role creation</source>
+                <source>User role creation</source>
                 <target>Création d'un groupe d'utilisateurs</target>
             </trans-unit>
             <trans-unit id="16">
-                <source>Role edit</source>
+                <source>User role edit</source>
                 <target>Modification d'un groupe d'utilisateurs</target>
             </trans-unit>
             <trans-unit id="17">
