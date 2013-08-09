@@ -14,3 +14,8 @@ services:
         arguments: [ @security.encoder_factory ]
         tags:
             - { name: form.type, alias: bigfoot_user }
+    form.type.role_menu:
+            class: Bigfoot\Bundle\UserBundle\Form\BigfootRoleMenuType
+            arguments: [ @service_container ]
+            tags:
+                - { name: form.type, alias: bigfootrolemenutype }
