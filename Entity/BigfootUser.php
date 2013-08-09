@@ -298,10 +298,7 @@ class BigfootUser extends BaseUser implements Serializable
      *
      * @return void
      */
-    public function eraseCredentials()
-    {
-        $this->password = null;
-    }
+    public function eraseCredentials() {}
 
     /**
      * (PHP 5 &gt;= 5.1.0)<br/>
