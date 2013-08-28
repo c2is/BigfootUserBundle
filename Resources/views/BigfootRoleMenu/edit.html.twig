@@ -2,7 +2,7 @@
 
 {% block body %}
     {% include 'BigfootCoreBundle:crud:form.html.twig' with {
-        'action_route': path('admin_role_menu_update', { 'id': entity.id }),
+        'action_route': path('admin_role_menu_update', { 'role': entity.role }),
         'action_name': 'Edit',
         'form_title': 'Role menu edit',
         'cancel_route': 'admin_role_menu',
