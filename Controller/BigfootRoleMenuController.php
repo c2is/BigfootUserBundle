@@ -104,3 +104,4 @@ class BigfootRoleMenuController extends Controller
         );
     }
 }
+

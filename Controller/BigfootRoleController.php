@@ -60,7 +60,6 @@ class BigfootRoleController extends CrudController
      */
     public function createAction(Request $request)
     {
-
         return $this->doCreate($request);
     }
 
@@ -73,7 +72,6 @@ class BigfootRoleController extends CrudController
      */
     public function newAction()
     {
-
         return $this->doNew();
     }
 
@@ -86,7 +84,6 @@ class BigfootRoleController extends CrudController
      */
     public function editAction($id)
     {
-
         return $this->doEdit($id);
     }
 
@@ -99,9 +96,9 @@ class BigfootRoleController extends CrudController
      */
     public function updateAction(Request $request, $id)
     {
-
         return $this->doUpdate($request, $id);
     }
+
     /**
      * Deletes a BigfootRole entity.
      *
@@ -110,7 +107,6 @@ class BigfootRoleController extends CrudController
      */
     public function deleteAction(Request $request, $id)
     {
-
-    return $this->doDelete($request, $id);
-}
+        return $this->doDelete($request, $id);
+    }
 }

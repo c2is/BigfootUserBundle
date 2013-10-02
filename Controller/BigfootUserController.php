@@ -79,7 +79,6 @@ class BigfootUserController extends CrudController
      */
     public function newAction()
     {
-
         return $this->doNew();
     }
 
@@ -92,7 +91,6 @@ class BigfootUserController extends CrudController
      */
     public function editAction($id)
     {
-
         return $this->doEdit($id);
     }
 
@@ -105,9 +103,9 @@ class BigfootUserController extends CrudController
      */
     public function updateAction(Request $request, $id)
     {
-
         return $this->doUpdate($request, $id);
     }
+
     /**
      * Deletes a BigfootUser entity.
      *
@@ -116,7 +114,6 @@ class BigfootUserController extends CrudController
      */
     public function deleteAction(Request $request, $id)
     {
-
-    return $this->doDelete($request, $id);
-}
+        return $this->doDelete($request, $id);
+    }
 }
