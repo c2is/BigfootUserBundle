@@ -2,9 +2,9 @@
 
 namespace Bigfoot\Bundle\UserBundle\Controller;
 
+use Bigfoot\Bundle\CoreBundle\Crud\CrudController;
 use Bigfoot\Bundle\UserBundle\Entity\BigfootRoleMenu;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Bigfoot\Bundle\UserBundle\Form\BigfootRoleMenuType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,15 +17,32 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @Route("/admin/role/menu")
  */
-class BigfootRoleMenuController extends Controller
+class BigfootRoleMenuController extends CrudController
 {
+    public function getEntity()
+    {
+        return 'BigfootUserBundle:BigfootRoleMenu';
+    }
+
+    public function getName()
+    {
+        return 'admin_role_menu';
+    }
+
+    public function getFields()
+    {
+        return array(
+            'name' => 'Name',
+            'label' => 'Label',
+        );
+    }
 
     /**
      * Lists all BigfootRole entities.
      *
      * @Route("/", name="admin_role_menu")
      * @Method("GET")
-     * @Template()
+     * @Template("BigfootCoreBundle:crud:index.html.twig")
      */
     public function indexAction()
     {
@@ -33,8 +50,22 @@ class BigfootRoleMenuController extends Controller
 
         $entities = $em->getRepository('BigfootUserBundle:BigfootRole')->findAll();
 
+        if (method_exists($this, 'newAction')) {
+            $theme = $this->container->get('bigfoot.theme');
+            $theme['page_content']['globalActions']->addItem(new Item('crud_add', $this->getAddLabel(), $this->getRouteNameForAction('new'), array(), array(), 'file'));
+        }
+
         return array(
-            'entities' => $entities,
+            'list_items'        => $entities,
+            'list_edit_route'   => $this->getRouteNameForAction('edit'),
+            'list_title'        => $this->getEntityLabelPlural(),
+            'list_fields'       => $this->getFields(),
+            'breadcrumbs'       => array(
+                array(
+                    'url'   => $this->getRouteNameForAction('index'),
+                    'label' => $this->getEntityLabelPlural()
+                ),
+            ),
         );
     }
 
@@ -43,11 +74,10 @@ class BigfootRoleMenuController extends Controller
      *
      * @Route("/{id}/edit", name="admin_role_menu_edit")
      * @Method("GET")
-     * @Template()
+     * @Template("BigfootCoreBundle:crud:edit.html.twig")
      */
     public function editAction($id)
     {
-        $this->container->get('bigfoot.theme');
         $em = $this->getDoctrine()->getManager();
 
         $repository = $this->getDoctrine()
@@ -63,10 +93,25 @@ class BigfootRoleMenuController extends Controller
         }
 
         $editForm = $this->createForm('bigfootrolemenutype', $entity);
+        $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'                  => $editForm->createView(),
+            'form_method'           => 'PUT',
+            'form_action'           => $this->generateUrl($this->getRouteNameForAction('update'), array('role' => $entity->getRole())),
+            'form_cancel_route'     => $this->getRouteNameForAction('index'),
+            'form_title'            => sprintf('%s edit', $this->getEntityLabel()),
+            'isAjax'                => $this->get('request')->isXmlHttpRequest(),
+            'breadcrumbs'       => array(
+                array(
+                    'url'   => $this->getRouteNameForAction('index'),
+                    'label' => $this->getEntityLabelPlural()
+                ),
+                array(
+                    'url'   => $this->getRouteNameForAction('edit', array('id' => $entity->getId())),
+                    'label' => sprintf('%s edit', $this->getEntityLabel())
+                ),
+            ),
         );
     }
 
