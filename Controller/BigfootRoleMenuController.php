@@ -19,14 +19,25 @@ use Symfony\Component\Yaml\Yaml;
  */
 class BigfootRoleMenuController extends CrudController
 {
-    public function getEntity()
+    /**
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'admin_role_menu';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getEntity()
     {
         return 'BigfootUserBundle:BigfootRoleMenu';
     }
 
-    public function getName()
+    protected function getEntityLabel()
     {
-        return 'admin_role_menu';
+        return 'User role menu';
     }
 
     public function getFields()
