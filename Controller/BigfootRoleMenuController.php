@@ -4,6 +4,7 @@ namespace Bigfoot\Bundle\UserBundle\Controller;
 
 use Bigfoot\Bundle\UserBundle\Entity\BigfootRoleMenu;
 use Symfony\Component\HttpFoundation\Request;
+use Bigfoot\Bundle\CoreBundle\Crud\CrudController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Bigfoot\Bundle\UserBundle\Form\BigfootRoleMenuType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -17,25 +18,45 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @Route("/admin/role/menu")
  */
-class BigfootRoleMenuController extends Controller
+class BigfootRoleMenuController extends CrudController
 {
+
+    /**
+     * @return string
+     */
+    protected function getName()
+    {
+        return 'admin_role_menu';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getEntity()
+    {
+        return 'BigfootUserBundle:BigfootRoleMenu';
+    }
+
+    protected function getEntityLabel()
+    {
+        return 'User role menu';
+    }
+
+    protected function getFields()
+    {
+        return array('id' => 'ID', 'slug' => 'Slug');
+    }
 
     /**
      * Lists all BigfootRole entities.
      *
      * @Route("/", name="admin_role_menu")
      * @Method("GET")
-     * @Template()
+     * @Template("BigfootCoreBundle:crud:index.html.twig")
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('BigfootUserBundle:BigfootRole')->findAll();
-
-        return array(
-            'entities' => $entities,
-        );
+        return $this->doIndex();
     }
 
     /**
