@@ -11,10 +11,12 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 /**
  * BigfootUser controller.
  *
+ * @Cache(maxage="0", smaxage="0", public="false")
  * @Route("/admin/user")
  */
 class UserController extends ContainerAware

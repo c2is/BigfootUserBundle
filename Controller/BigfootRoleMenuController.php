@@ -9,12 +9,14 @@ use Bigfoot\Bundle\UserBundle\Form\BigfootRoleMenuType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Bigfoot\Bundle\CoreBundle\Theme\Menu\Item;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * BigfootRoleMenu controller.
  *
+ * @Cache(maxage="0", smaxage="0", public="false")
  * @Route("/admin/role/menu")
  */
 class BigfootRoleMenuController extends CrudController
