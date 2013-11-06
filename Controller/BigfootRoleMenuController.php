@@ -73,7 +73,7 @@ class BigfootRoleMenuController extends CrudController
             'list_fields'       => $this->getFields(),
             'breadcrumbs'       => array(
                 array(
-                    'url'   => $this->getRouteNameForAction('index'),
+                    'url'   => $this->generateUrl($this->getRouteNameForAction('index')),
                     'label' => $this->getEntityLabelPlural()
                 ),
             ),
@@ -115,11 +115,11 @@ class BigfootRoleMenuController extends CrudController
             'isAjax'                => $this->get('request')->isXmlHttpRequest(),
             'breadcrumbs'       => array(
                 array(
-                    'url'   => $this->getRouteNameForAction('index'),
+                    'url'   => $this->generateUrl($this->getRouteNameForAction('index')),
                     'label' => $this->getEntityLabelPlural()
                 ),
                 array(
-                    'url'   => $this->getRouteNameForAction('edit', array('id' => $entity->getId())),
+                    'url'   => $this->generateUrl($this->getRouteNameForAction('edit'), array('id' => $entity->getId())),
                     'label' => sprintf('%s edit', $this->getEntityLabel())
                 ),
             ),
