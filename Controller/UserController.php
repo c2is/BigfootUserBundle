@@ -36,8 +36,16 @@ class UserController extends ContainerAware
         $editForm = $this->container->get('form.factory')->create(new AccountType($this->container->get('security.encoder_factory')), $user);
 
         return array(
-            'user'      => $user,
-            'edit_form' => $editForm->createView(),
+            'form'                  => $editForm->createView(),
+            'form_method'           => 'PUT',
+            'form_action'           => $this->container->get('router')->generate('user_account_edit'),
+            'form_title'            => 'My account',
+            'isAjax'                => $this->container->get('request')->isXmlHttpRequest(),
+            'breadcrumbs'       => array(
+                array(
+                    'label' => 'My account'
+                ),
+            ),
         );
     }
 
@@ -64,6 +72,15 @@ class UserController extends ContainerAware
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
+
+            $this->container->get('session')->getFlashBag()->add(
+                'success',
+                $this->container->get('templating')->render('BigfootCoreBundle:includes:flash.html.twig', array(
+                    'icon' => 'ok',
+                    'heading' => 'Success!',
+                    'message' => 'Your account has been updated.',
+                ))
+            );
 
             return new RedirectResponse($this->container->get('router')->generate('user_account'));
         }
