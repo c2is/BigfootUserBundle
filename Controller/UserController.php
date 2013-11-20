@@ -6,6 +6,7 @@ use Bigfoot\Bundle\UserBundle\Form\AccountType;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\SecurityContext;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,7 +31,7 @@ class UserController extends ContainerAware
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         if (!$user) {
-            throw $this->createNotFoundException('No user account found');
+            throw new NotFoundHttpException('No user account found');
         }
 
         $editForm = $this->container->get('form.factory')->create(new AccountType($this->container->get('security.encoder_factory')), $user);
@@ -63,7 +64,7 @@ class UserController extends ContainerAware
         $entity = $this->container->get('security.context')->getToken()->getUser();
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find BigfootUser entity.');
+            throw new NotFoundHttpException('Unable to find BigfootUser entity.');
         }
 
         $editForm = $this->container->get('form.factory')->create(new AccountType($this->container->get('security.encoder_factory')), $entity);

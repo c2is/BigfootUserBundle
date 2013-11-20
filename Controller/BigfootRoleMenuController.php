@@ -4,6 +4,7 @@ namespace Bigfoot\Bundle\UserBundle\Controller;
 
 use Bigfoot\Bundle\CoreBundle\Crud\CrudController;
 use Bigfoot\Bundle\UserBundle\Entity\BigfootRoleMenu;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Bigfoot\Bundle\UserBundle\Form\BigfootRoleMenuType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -59,7 +60,7 @@ class BigfootRoleMenuController extends CrudController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine')->getManager();
 
         $entities = $em->getRepository('BigfootUserBundle:BigfootRole')->findAll();
 
@@ -75,7 +76,7 @@ class BigfootRoleMenuController extends CrudController
             'list_fields'       => $this->getFields(),
             'breadcrumbs'       => array(
                 array(
-                    'url'   => $this->generateUrl($this->getRouteNameForAction('index')),
+                    'url'   => $this->container->get('router')->generate($this->getRouteNameForAction('index')),
                     'label' => $this->getEntityLabelPlural()
                 ),
             ),
@@ -91,9 +92,9 @@ class BigfootRoleMenuController extends CrudController
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine')->getManager();
 
-        $repository = $this->getDoctrine()
+        $repository = $this->get('doctrine')
             ->getRepository('BigfootUserBundle:BigfootRole');
 
         $role = $repository->findOneById($id);
@@ -105,23 +106,23 @@ class BigfootRoleMenuController extends CrudController
             $entity->setRole($role->getName());
         }
 
-        $editForm = $this->createForm('bigfootrolemenutype', $entity);
+        $editForm = $this->container->get('form.factory')->create('bigfootrolemenutype', $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'form'                  => $editForm->createView(),
             'form_method'           => 'PUT',
-            'form_action'           => $this->generateUrl($this->getRouteNameForAction('update'), array('role' => $entity->getRole())),
+            'form_action'           => $this->container->get('router')->generate($this->getRouteNameForAction('update'), array('role' => $entity->getRole())),
             'form_cancel_route'     => $this->getRouteNameForAction('index'),
             'form_title'            => sprintf('%s edit', $this->getEntityLabel()),
             'isAjax'                => $this->get('request')->isXmlHttpRequest(),
             'breadcrumbs'       => array(
                 array(
-                    'url'   => $this->generateUrl($this->getRouteNameForAction('index')),
+                    'url'   => $this->container->get('router')->generate($this->getRouteNameForAction('index')),
                     'label' => $this->getEntityLabelPlural()
                 ),
                 array(
-                    'url'   => $this->generateUrl($this->getRouteNameForAction('edit'), array('id' => $entity->getId())),
+                    'url'   => $this->container->get('router')->generate($this->getRouteNameForAction('edit'), array('id' => $entity->getId())),
                     'label' => sprintf('%s edit', $this->getEntityLabel())
                 ),
             ),
@@ -137,7 +138,7 @@ class BigfootRoleMenuController extends CrudController
      */
     public function updateAction(Request $request, $role)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine')->getManager();
 
         $entity = $em->getRepository('BigfootUserBundle:BigfootRoleMenu')->findOneBy(array("role" => $role));
 
@@ -146,14 +147,14 @@ class BigfootRoleMenuController extends CrudController
             $entity->setRole($role);
         }
 
-        $editForm = $this->createForm('bigfootrolemenutype', $entity);
+        $editForm = $this->container->get('form.factory')->create('bigfootrolemenutype', $entity);
         $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_role_menu'));
+            return new RedirectResponse($this->container->get('router')->generate('admin_role_menu'));
         }
 
         return array(
