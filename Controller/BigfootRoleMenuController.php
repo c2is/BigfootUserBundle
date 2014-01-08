@@ -60,7 +60,7 @@ class BigfootRoleMenuController extends CrudController
      */
     public function indexAction()
     {
-        $em = $this->get('doctrine')->getManager();
+        $em = $this->container->get('doctrine')->getManager();
 
         $entities = $em->getRepository('BigfootUserBundle:BigfootRole')->findAll();
 
@@ -71,7 +71,6 @@ class BigfootRoleMenuController extends CrudController
 
         return array(
             'list_items'        => $entities,
-            'list_edit_route'   => $this->getRouteNameForAction('edit'),
             'list_title'        => $this->getEntityLabelPlural(),
             'list_fields'       => $this->getFields(),
             'breadcrumbs'       => array(
@@ -80,6 +79,12 @@ class BigfootRoleMenuController extends CrudController
                     'label' => $this->getEntityLabelPlural()
                 ),
             ),
+            'actions'           => array(
+                array(
+                    'href'  => $this->container->get('router')->generate($this->getRouteNameForAction('edit'), array('id' => '__ID__')),
+                    'icon'  => 'pencil',
+                )
+            )
         );
     }
 
@@ -92,22 +97,23 @@ class BigfootRoleMenuController extends CrudController
      */
     public function editAction($id)
     {
-        $em = $this->get('doctrine')->getManager();
+        $em = $this->container->get('doctrine')->getManager();
 
-        $repository = $this->get('doctrine')
+        $repository = $this->container->get('doctrine')
             ->getRepository('BigfootUserBundle:BigfootRole');
 
         $role = $repository->findOneById($id);
 
-        $entity = $em->getRepository('BigfootUserBundle:BigfootRoleMenu')->findOneBy(array("role" => $role->getName()));
+        $entity = $em->getRepository('BigfootUserBundle:BigfootRoleMenu')->findOneBy(array('role' => $role->getName()));
 
         if (!$entity) {
             $entity = new BigfootRoleMenu();
             $entity->setRole($role->getName());
+            $em->persist($entity);
+            $em->flush();
         }
 
         $editForm = $this->container->get('form.factory')->create('bigfootrolemenutype', $entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'form'                  => $editForm->createView(),
@@ -115,7 +121,7 @@ class BigfootRoleMenuController extends CrudController
             'form_action'           => $this->container->get('router')->generate($this->getRouteNameForAction('update'), array('role' => $entity->getRole())),
             'form_cancel_route'     => $this->getRouteNameForAction('index'),
             'form_title'            => sprintf('%s edit', $this->getEntityLabel()),
-            'isAjax'                => $this->get('request')->isXmlHttpRequest(),
+            'isAjax'                => $this->container->get('request')->isXmlHttpRequest(),
             'breadcrumbs'       => array(
                 array(
                     'url'   => $this->container->get('router')->generate($this->getRouteNameForAction('index')),
@@ -138,7 +144,7 @@ class BigfootRoleMenuController extends CrudController
      */
     public function updateAction(Request $request, $role)
     {
-        $em = $this->get('doctrine')->getManager();
+        $em = $this->container->get('doctrine')->getManager();
 
         $entity = $em->getRepository('BigfootUserBundle:BigfootRoleMenu')->findOneBy(array("role" => $role));
 
