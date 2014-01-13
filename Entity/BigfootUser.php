@@ -83,7 +83,6 @@ class BigfootUser extends BaseUser implements Serializable
     {
         $this->salt      = base64_encode(mcrypt_create_iv(24, MCRYPT_DEV_URANDOM));
         $this->userRoles = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->salt      = base64_encode(mcrypt_create_iv(24, MCRYPT_DEV_URANDOM));
     }
 
     /**
