@@ -74,6 +74,11 @@ class BigfootUser extends BaseUser implements Serializable
      */
     private $userRoles;
 
+    public function __toString()
+    {
+        return $this->username;
+    }
+
     public function __construct()
     {
         $this->userRoles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -253,7 +258,9 @@ class BigfootUser extends BaseUser implements Serializable
      */
     public function addUserRole(BigfootRole $userRole)
     {
-        $this->userRoles->add($userRole);
+        if (!$this->userRoles->contains($userRole)) {
+            $this->userRoles->add($userRole);
+        }
 
         return $this;
     }
@@ -279,15 +286,25 @@ class BigfootUser extends BaseUser implements Serializable
     }
 
     /**
-     * Adds a User Role from a string.
+     * Remove a User Role.
      *
-     * @param $role String representation of the User Role to be added (eg: ROLE_USER)
+     * @param \Doctrine\Common\Collections\ArrayCollection $roles
+     * @return BigfootUser
      */
-    public function addRole($role)
+    public function removeUserRole(BigfootRole $userRole)
+    {
+        $this->userRoles->removeElement($userRole);
+        return $this;
+    }
+
+    /**
+     * Remove a User Role
+     */
+    public function removeRole($role)
     {
         $userRole = new BigfootRole();
         $userRole->setName($role);
-        $this->addUserRole($userRole);
+        $this->removeUserRole($userRole);
     }
 
     /**
