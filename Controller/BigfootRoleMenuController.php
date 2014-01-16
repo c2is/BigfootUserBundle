@@ -2,17 +2,18 @@
 
 namespace Bigfoot\Bundle\UserBundle\Controller;
 
-use Bigfoot\Bundle\CoreBundle\Crud\CrudController;
-use Bigfoot\Bundle\UserBundle\Entity\BigfootRoleMenu;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Bigfoot\Bundle\UserBundle\Form\BigfootRoleMenuType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Yaml\Yaml;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+use Bigfoot\Bundle\CoreBundle\Controller\CrudController;
 use Bigfoot\Bundle\CoreBundle\Theme\Menu\Item;
-use Symfony\Component\Yaml\Yaml;
+use Bigfoot\Bundle\UserBundle\Form\BigfootRoleMenuType;
+use Bigfoot\Bundle\UserBundle\Entity\BigfootRoleMenu;
 
 /**
  * BigfootRoleMenu controller.

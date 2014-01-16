@@ -2,17 +2,17 @@
 
 namespace Bigfoot\Bundle\UserBundle\Controller;
 
-use Bigfoot\Bundle\UserBundle\Form\AccountType;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\SecurityContext;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+use Bigfoot\Bundle\CoreBundle\Controller\BaseController;
+use Bigfoot\Bundle\UserBundle\Form\AccountType;
 
 /**
  * BigfootUser controller.
@@ -20,7 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
  * @Cache(maxage="0", smaxage="0", public="false")
  * @Route("/admin/user")
  */
-class UserController extends ContainerAware
+class UserController extends BaseController
 {
     /**
      * @Route("/account", name="user_account")
@@ -37,12 +37,12 @@ class UserController extends ContainerAware
         $editForm = $this->container->get('form.factory')->create(new AccountType($this->container->get('security.encoder_factory')), $user);
 
         return array(
-            'form'                  => $editForm->createView(),
-            'form_method'           => 'PUT',
-            'form_action'           => $this->container->get('router')->generate('user_account_edit'),
-            'form_title'            => 'My account',
-            'isAjax'                => $this->container->get('request')->isXmlHttpRequest(),
-            'breadcrumbs'       => array(
+            'form'        => $editForm->createView(),
+            'form_method' => 'PUT',
+            'form_action' => $this->container->get('router')->generate('user_account_edit'),
+            'form_title'  => 'My account',
+            'isAjax'      => $this->container->get('request')->isXmlHttpRequest(),
+            'breadcrumbs' => array(
                 array(
                     'label' => 'My account'
                 ),
@@ -77,7 +77,7 @@ class UserController extends ContainerAware
             $this->container->get('session')->getFlashBag()->add(
                 'success',
                 $this->container->get('templating')->render('BigfootCoreBundle:includes:flash.html.twig', array(
-                    'icon' => 'ok',
+                    'icon'    => 'ok',
                     'heading' => 'Success!',
                     'message' => 'Your account has been updated.',
                 ))

@@ -2,13 +2,13 @@
 
 namespace Bigfoot\Bundle\UserBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContext;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+use Bigfoot\Bundle\CoreBundle\Controller\BaseController;
 
 /**
  * BigfootUser controller.
@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
  * @Cache(maxage="0", smaxage="0", public="false")
  * @Route("/admin")
  */
-class LoginController extends ContainerAware
+class LoginController extends BaseController
 {
     /**
      * @Route("/login", name="admin_login")
