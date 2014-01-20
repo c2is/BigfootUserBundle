@@ -2,11 +2,10 @@
 
 namespace Bigfoot\Bundle\UserBundle\Entity;
 
+use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Security\Core\Role\RoleInterface;
-
 use Serializable;
 
 /**
@@ -42,7 +41,7 @@ class BigfootRole implements RoleInterface, Serializable
     private $label;
 
     /**
-     * @ORM\ManyToMany(targetEntity="BigfootUser", mappedBy="userRoles")
+     * @ORM\ManyToMany(targetEntity="BigfootUser", mappedBy="roles")
      */
     private $users;
 
@@ -51,10 +50,15 @@ class BigfootRole implements RoleInterface, Serializable
      */
     private $locale;
 
+    public function __toString()
+    {
+        return $this->label;
+    }
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -70,14 +74,14 @@ class BigfootRole implements RoleInterface, Serializable
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -143,11 +147,6 @@ class BigfootRole implements RoleInterface, Serializable
     public function getRole()
     {
         return $this->name;
-    }
-
-    public function __toString()
-    {
-        return $this->label;
     }
 
     /**

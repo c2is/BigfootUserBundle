@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('user')
                     ->children()
-                        ->scalarNode('class')->defaultValue('Bigfoot\\Bundle\\UserBundle\\Model\\User')->end()
+                        ->scalarNode('class')->defaultValue('Bigfoot\Bundle\UserBundle\Model\User')->end()
                     ->end()
                 ->end()
                 ->arrayNode('menu_security')

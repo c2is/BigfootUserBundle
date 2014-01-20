@@ -69,7 +69,6 @@ class BigfootUserController extends CrudController
      */
     public function createAction(Request $request)
     {
-
         return $this->doCreate($request);
     }
 
