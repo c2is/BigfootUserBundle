@@ -119,7 +119,7 @@ abstract class BigfootUser implements AdvancedUserInterface, Serializable
 
     /**
      * @ORM\ManyToMany(targetEntity="BigfootRole", inversedBy="users")
-     * @ORM\JoinTable(name="bigfoot_user_roles")
+     * @ORM\JoinTable(name="bigfoot_user_role")
      */
     protected $roles;
 
@@ -135,7 +135,6 @@ abstract class BigfootUser implements AdvancedUserInterface, Serializable
     /**
      * Add Role.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $roles
      * @return BigfootUser
      */
     public function addRole(BigfootRole $role)
@@ -147,23 +146,8 @@ abstract class BigfootUser implements AdvancedUserInterface, Serializable
         return $this;
     }
 
-    /**
-     * Set Roles
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $roles
-     * @return BigfootUser
-     */
-    public function setRoles(ArrayCollection $roles)
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
     public function getRoles()
     {
-        // var_dump($this->roles);die();
-
         foreach ($this->roles as $role) {
             $roles[] = $role->getName();
         }
@@ -171,6 +155,11 @@ abstract class BigfootUser implements AdvancedUserInterface, Serializable
         $roles[] = static::ROLE_DEFAULT;
 
         return array_unique($roles);
+    }
+
+    public function getFormRoles()
+    {
+        return $this->roles;
     }
 
     /**

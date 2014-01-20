@@ -10,10 +10,12 @@ class BigfootUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // var_dump($options['data']);die();
+
         $builder
             ->add('username')
             ->add('email')
-            ->add('full_name')
+            ->add('fullName')
             ->add(
                 'locale',
                 'choice',
@@ -24,7 +26,14 @@ class BigfootUserType extends AbstractType
                     )
                 )
             )
-            ->add('roles')
+            ->add(
+                'formRoles',
+                'entity',
+                array(
+                    'class'    => 'BigfootUserBundle:BigfootRole',
+                    'multiple' => true,
+                )
+            )
             ->add(
                 'plainPassword',
                 'repeated',

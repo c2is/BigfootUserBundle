@@ -67,10 +67,12 @@ class SecurityController extends BaseController
         $form = $this->createForm('admin_forgot_password');
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $user = $form->get('email')->getData();
+
+                var_dump($user);die();
 
                 if ($user->isPasswordRequestNonExpired($this->container->getParameter('gmu_user.resetting.token_ttl'))) {
                     $this->addFlash('error', $this->getTranslator()->trans('forgot_password.form.errors.request_sent'));

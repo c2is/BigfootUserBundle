@@ -39,7 +39,6 @@ class BigfootUser extends BaseUser
         parent::__construct();
 
         $this->setEnabled(true);
-        $this->setLastLogin(new \DateTime());
     }
 
     /**
