@@ -26,5 +26,6 @@ class BigfootUserExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter('bigfoot_user', $config);
+        $container->setParameter('bigfoot_user.resetting.token_ttl', $config['resetting']['token_ttl']);
     }
 }

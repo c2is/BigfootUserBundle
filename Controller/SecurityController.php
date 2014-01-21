@@ -4,12 +4,17 @@ namespace Bigfoot\Bundle\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 use Bigfoot\Bundle\CoreBundle\Controller\BaseController;
+use Bigfoot\Bundle\UserBundle\Form\Model\ForgotPasswordModel;
+use Bigfoot\Bundle\UserBundle\Form\Model\ResetPasswordModel;
+use Bigfoot\Bundle\UserBundle\Event\UserEvents;
 
 /**
  * BigfootUser controller.
@@ -64,30 +69,88 @@ class SecurityController extends BaseController
      */
     public function forgotPasswordAction(Request $request)
     {
-        $form = $this->createForm('admin_forgot_password');
+        $form = $this->createForm('admin_forgot_password', new ForgotPasswordModel());
 
         if ('POST' === $request->getMethod()) {
-            $form->handleRequest($request);
+            $form->bind($request);
 
             if ($form->isValid()) {
                 $user = $form->get('email')->getData();
 
-                var_dump($user);die();
-
-                if ($user->isPasswordRequestNonExpired($this->container->getParameter('gmu_user.resetting.token_ttl'))) {
-                    $this->addFlash('error', $this->getTranslator()->trans('forgot_password.form.errors.request_sent'));
-
-                    return $this->redirect($this->generateUrl('forgot_password'));
+                if ($user->isPasswordRequestNonExpired($this->container->getParameter('bigfoot_user.resetting.token_ttl'))) {
+                    return new JsonResponse(
+                        array(
+                            'status'  => false,
+                            'message' => 'Request already sent, check your emails.',
+                        )
+                    );
                 }
 
-                $this->getUserManager()->generateToken($user);
+                $token = $this->getUserManager()->generateToken($user);
 
-                return $this->redirect($this->generateUrl('forgot_password'));
+                if ($request->isXmlHttpRequest()) {
+                    return new JsonResponse(
+                        array(
+                            'status'  => $token['status'],
+                            'message' => $token['message'],
+                        )
+                    );
+                } else {
+                    return $this->redirect($this->generateUrl('forgot_password'));
+                }
+            } else {
+                if ($request->isXmlHttpRequest()) {
+                    return new JsonResponse(
+                        array(
+                            'status'  => false,
+                            'message' => 'Invalid email.',
+                        )
+                    );
+                }
             }
         }
 
         return array(
             'form' => $form->createView(),
+        );
+    }
+
+    /**
+     * Reset password
+     *
+     * @Route("/reset-password/{confirmationToken}", name="admin_reset_password")
+     * @Template()
+     */
+    public function resetPasswordAction(Request $request, $confirmationToken)
+    {
+        $user     = $this->getRepository('BigfootUserBundle:BigfootUser')->findOneByConfirmationToken($confirmationToken);
+        $tokenTtl = $this->container->getParameter('bigfoot_user.resetting.token_ttl');
+
+        if (!$user || !$user->isPasswordRequestNonExpired($tokenTtl)) {
+            return $this->redirect($this->generateUrl('admin_login'));
+        }
+
+        $form = $this->createForm('admin_reset_password', new ResetPasswordModel());
+
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                $user->setPlainPassword($data->plainPassword);
+
+                $this->getEventDispatcher()->dispatch(UserEvents::RESET_PASSWORD, new GenericEvent($user));
+
+                $this->addFlash('success', 'Your password has been reset successfully!');
+
+                return $this->redirect($this->generateUrl('admin_home'));
+            }
+        }
+
+        return array(
+            'form'              => $form->createView(),
+            'confirmationToken' => $confirmationToken,
         );
     }
 }

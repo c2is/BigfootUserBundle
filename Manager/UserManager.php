@@ -67,6 +67,34 @@ class UserManager
         }
     }
 
+    public function generateToken(BigfootUser $user)
+    {
+        $token = $this->tokenGenerator->generateToken();
+        $error = false;
+
+        try {
+            $this->userMailer->sendForgotPasswordMail($user, $token);
+        } catch (Exception $e) {
+            $error   = true;
+            $message = "Couldn't send email, please contact an admin.";
+        }
+
+        if ($error == false) {
+            $message = "Email sent check your inbox.";
+
+            $user->setConfirmationToken($token);
+            $user->setPasswordRequestedAt(new \DateTime());
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+        }
+
+        return array(
+            'status'  => $error,
+            'message' => $message,
+        );
+    }
+
     protected function getEncoder(BigfootUser $user)
     {
         return $this->encoderFactory->getEncoder($user);
