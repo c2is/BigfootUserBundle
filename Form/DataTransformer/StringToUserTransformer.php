@@ -26,10 +26,7 @@ class StringToUserTransformer implements DataTransformerInterface
 
     public function reverseTransform($value)
     {
-        $user = $this->entityManager->getRepository('BigfootUserBundle:User')->findOneByEmail($value);
-
-        var_dump($user);die();
-        // y.latti@c2is.fr
+        $user = $this->entityManager->getRepository('BigfootUserBundle:BigfootUser')->findOneByEmail($value);
 
         if (!$user) {
             throw new TransformationFailedException("User not found");

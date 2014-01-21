@@ -10,6 +10,8 @@ use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Doctrine\ORM\EntityManager;
 
 use Bigfoot\Bundle\UserBundle\Entity\BigfootUser;
+use Bigfoot\Bundle\UserBundle\Manager\UserManager;
+use Bigfoot\Bundle\UserBundle\Event\UserEvents;
 
 /**
  * User Listener
@@ -60,5 +62,6 @@ class UserListener implements EventSubscriberInterface
         $user->setPasswordRequestedAt(null);
 
         $this->userManager->updateUser($user);
+        $this->userManager->loginUser('back_office', $user);
     }
 }

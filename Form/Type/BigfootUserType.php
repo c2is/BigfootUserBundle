@@ -10,8 +10,6 @@ class BigfootUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // var_dump($options['data']);die();
-
         $builder
             ->add('username')
             ->add('email')

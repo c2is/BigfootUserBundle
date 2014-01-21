@@ -27,6 +27,8 @@ services:
     bigfoot_user.listener.user:
         class: Bigfoot\Bundle\UserBundle\Listener\UserListener
         arguments: [ @bigfoot_user.manager.user ]
+        tags:
+            - { name: kernel.event_subscriber }
     # User Type
     bigfoot_user.form.type.user:
         class: Bigfoot\Bundle\UserBundle\Form\Type\BigfootUserType
@@ -38,3 +40,8 @@ services:
         arguments: [ @doctrine.orm.entity_manager ]
         tags:
             - { name: form.type, alias: admin_forgot_password }
+    # ResetPassword Type
+    bigfoot_user.form.type.reset_password:
+        class: Bigfoot\Bundle\UserBundle\Form\Type\ResetPasswordType
+        tags:
+            - { name: form.type, alias: admin_reset_password }

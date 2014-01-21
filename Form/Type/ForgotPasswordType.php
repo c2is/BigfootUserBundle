@@ -39,7 +39,8 @@ class ForgotPasswordType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Bigfoot\Bundle\UserBundle\Form\Model\ForgotPasswordModel',
+                'data_class'      => 'Bigfoot\Bundle\UserBundle\Form\Model\ForgotPasswordModel',
+                'csrf_protection' => false,
             )
         );
     }
