@@ -2,11 +2,13 @@
 
 namespace Bigfoot\Bundle\UserBundle\DataFixtures\ORM;
 
-use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadBigfootRoleData implements FixtureInterface
+use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
+
+class LoadBigfootRoleData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * Load data fixtures with the passed EntityManager
@@ -15,20 +17,21 @@ class LoadBigfootRoleData implements FixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $roleRespository = $manager->getRepository('BigfootUserBundle:BigfootRole');
-        $roleAdmin = $roleRespository->findOneBy(array('name' => 'ROLE_ADMIN'));
+        $roleAdmin = new BigfootRole();
+        $roleAdmin
+            ->setName('ROLE_ADMIN')
+            ->setLabel('Admin');
 
-        if (!$roleAdmin) {
-            $roleAdmin = new BigfootRole();
-            $roleAdmin->setName('ROLE_ADMIN');
-            $roleAdmin->setLabel('Administrator');
-        }
+        $this->setReference('ROLE_ADMIN', $roleAdmin);
 
         $roleUser = new BigfootRole();
-        $roleUser->setName('ROLE_USER');
-        $roleUser->setLabel('User');
+        $roleUser
+            ->setName('ROLE_USER')
+            ->setLabel('User');
 
-        $repository = $manager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
+        $this->setReference('ROLE_USER', $roleUser);
+
+        $repository = $manager->getRepository('Gedmo\Translatable\Entity\Translation');
         $repository->translate($roleAdmin, 'label', 'fr', 'Administrateur');
         $repository->translate($roleUser, 'label', 'fr', 'Utilisateur');
 

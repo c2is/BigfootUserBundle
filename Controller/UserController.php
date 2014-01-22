@@ -12,83 +12,58 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 use Bigfoot\Bundle\CoreBundle\Controller\BaseController;
-use Bigfoot\Bundle\UserBundle\Form\AccountType;
+use Bigfoot\Bundle\UserBundle\Form\Type\BigfootUserType;
 
 /**
  * BigfootUser controller.
  *
  * @Cache(maxage="0", smaxage="0", public="false")
- * @Route("/admin/user")
+ * @Route("/admin")
  */
 class UserController extends BaseController
 {
     /**
-     * @Route("/account", name="user_account")
-     * @Template("BigfootUserBundle::account.html.twig")
+     * @Route("/account", name="admin_user_account")
+     * @Template()
      */
-    public function accountAction()
+    public function accountAction(Request $request)
     {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
         if (!$user) {
             throw new NotFoundHttpException('No user account found');
         }
 
-        $editForm = $this->container->get('form.factory')->create(new AccountType($this->container->get('security.encoder_factory')), $user);
+        $form = $this->createForm('bigfoot_user', $user);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $this->persistAndFlush($user);
+
+            $this->addFlash(
+                'success',
+                $this->render(
+                    'BigfootCoreBundle:includes:flash.html.twig',
+                    array(
+                        'icon'    => 'ok',
+                        'heading' => 'Success!',
+                        'message' => 'Your account has been updated.',
+                    )
+                )
+            );
+        }
 
         return array(
-            'form'        => $editForm->createView(),
-            'form_method' => 'PUT',
-            'form_action' => $this->container->get('router')->generate('user_account_edit'),
+            'form'        => $form->createView(),
+            'form_method' => 'POST',
+            'form_action' => $this->generateUrl('admin_user_account'),
             'form_title'  => 'My account',
-            'isAjax'      => $this->container->get('request')->isXmlHttpRequest(),
+            'isAjax'      => $this->getRequest()->isXmlHttpRequest(),
             'breadcrumbs' => array(
                 array(
-                    'label' => 'My account'
+                    'label' => 'My account',
                 ),
             ),
-        );
-    }
-
-    /**
-     * Edits an existing BigfootUser entity.
-     *
-     * @Route("/account/edit", name="user_account_edit")
-     * @Method("PUT")
-     * @Template("BigfootUserBundle::account.html.twig")
-     */
-    public function updateAction(Request $request)
-    {
-        $em = $this->container->get('doctrine')->getManager();
-
-        $entity = $this->container->get('security.context')->getToken()->getUser();
-
-        if (!$entity) {
-            throw new NotFoundHttpException('Unable to find BigfootUser entity.');
-        }
-
-        $editForm = $this->container->get('form.factory')->create(new AccountType($this->container->get('security.encoder_factory')), $entity);
-        $editForm->submit($request);
-
-        if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
-            $this->container->get('session')->getFlashBag()->add(
-                'success',
-                $this->container->get('templating')->render('BigfootCoreBundle:includes:flash.html.twig', array(
-                    'icon'    => 'ok',
-                    'heading' => 'Success!',
-                    'message' => 'Your account has been updated.',
-                ))
-            );
-
-            return new RedirectResponse($this->container->get('router')->generate('user_account'));
-        }
-
-        return array(
-            'user'      => $entity,
-            'edit_form' => $editForm->createView(),
         );
     }
 }

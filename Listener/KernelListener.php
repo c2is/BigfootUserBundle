@@ -18,11 +18,13 @@ class KernelListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $locale = $this->container->getParameter('locale');
+
         if ($requestLocale = $event->getRequest()->get('_locale')) {
             $locale = $requestLocale;
         } elseif ($token = $this->container->get('security.context')->getToken() and $user = $token->getUser() and $user instanceof UserInterface) {
             $locale = $user->getLocale();
         }
+
         $event->getRequest()->setLocale($locale);
     }
 
