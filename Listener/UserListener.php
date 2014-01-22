@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManager;
 
 use Bigfoot\Bundle\UserBundle\Entity\BigfootUser;
 use Bigfoot\Bundle\UserBundle\Manager\UserManager;
-use Bigfoot\Bundle\UserBundle\Event\UserEvents;
+use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 
 /**
  * User Listener
@@ -37,7 +37,7 @@ class UserListener implements EventSubscriberInterface
     {
         return array(
             SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
-            UserEvents::RESET_PASSWORD        => 'onResetPassword',
+            UserEvent::RESET_PASSWORD         => 'onResetPassword',
         );
     }
 
