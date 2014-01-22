@@ -22,9 +22,10 @@ class BigfootUserExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('bigfoot_user', $config);
-
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $container->setParameter('bigfoot_user', $config);
+        $container->setParameter('bigfoot_user.resetting.token_ttl', $config['resetting']['token_ttl']);
     }
 }

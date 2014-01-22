@@ -3,11 +3,12 @@
 namespace Bigfoot\Bundle\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Bigfoot\Bundle\CoreBundle\Crud\CrudController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+use Bigfoot\Bundle\CoreBundle\Controller\CrudController;
 
 /**
  * BigfootUser controller.
@@ -68,7 +69,6 @@ class BigfootUserController extends CrudController
      */
     public function createAction(Request $request)
     {
-
         return $this->doCreate($request);
     }
 

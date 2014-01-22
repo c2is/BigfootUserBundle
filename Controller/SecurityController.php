@@ -1,0 +1,156 @@
+<?php
+
+namespace Bigfoot\Bundle\UserBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\EventDispatcher\GenericEvent;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+use Bigfoot\Bundle\CoreBundle\Controller\BaseController;
+use Bigfoot\Bundle\UserBundle\Form\Model\ForgotPasswordModel;
+use Bigfoot\Bundle\UserBundle\Form\Model\ResetPasswordModel;
+use Bigfoot\Bundle\UserBundle\Event\UserEvent;
+
+/**
+ * BigfootUser controller.
+ *
+ * @Cache(maxage="0", smaxage="0", public="false")
+ * @Route("/admin")
+ */
+class SecurityController extends BaseController
+{
+    /**
+     * @Route("/login", name="admin_login")
+     * @Template()
+     */
+    public function loginAction(Request $request)
+    {
+        $session = $request->getSession();
+
+        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes->get(
+                SecurityContext::AUTHENTICATION_ERROR
+            );
+        } else {
+            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
+            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+        }
+
+        return array(
+            'last_username' => $session->get(SecurityContext::LAST_USERNAME),
+            'error'         => $error,
+        );
+    }
+
+    /**
+     * @Route("/login_check", name="admin_login_check")
+     */
+    public function loginCheckAction() {
+        throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
+    }
+
+    /**
+     * @Route("/logout", name="admin_logout")
+     */
+    public function logoutAction() {
+        throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
+    }
+
+    /**
+     * Forgot password
+     *
+     * @Route("/forgot-password", name="admin_forgot_password")
+     * @Template()
+     */
+    public function forgotPasswordAction(Request $request)
+    {
+        $form = $this->createForm('admin_forgot_password', new ForgotPasswordModel());
+
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $user = $form->get('email')->getData();
+
+                if ($user->isPasswordRequestNonExpired($this->container->getParameter('bigfoot_user.resetting.token_ttl'))) {
+                    return new JsonResponse(
+                        array(
+                            'status'  => false,
+                            'message' => 'Request already sent, check your emails.',
+                        )
+                    );
+                }
+
+                $token = $this->getUserManager()->generateToken($user);
+
+                if ($request->isXmlHttpRequest()) {
+                    return new JsonResponse(
+                        array(
+                            'status'  => $token['status'],
+                            'message' => $token['message'],
+                        )
+                    );
+                } else {
+                    return $this->redirect($this->generateUrl('forgot_password'));
+                }
+            } else {
+                if ($request->isXmlHttpRequest()) {
+                    return new JsonResponse(
+                        array(
+                            'status'  => false,
+                            'message' => 'Invalid email.',
+                        )
+                    );
+                }
+            }
+        }
+
+        return array(
+            'form' => $form->createView(),
+        );
+    }
+
+    /**
+     * Reset password
+     *
+     * @Route("/reset-password/{confirmationToken}", name="admin_reset_password")
+     * @Template()
+     */
+    public function resetPasswordAction(Request $request, $confirmationToken)
+    {
+        $user     = $this->getRepository('BigfootUserBundle:BigfootUser')->findOneByConfirmationToken($confirmationToken);
+        $tokenTtl = $this->container->getParameter('bigfoot_user.resetting.token_ttl');
+
+        if (!$user || !$user->isPasswordRequestNonExpired($tokenTtl)) {
+            return $this->redirect($this->generateUrl('admin_login'));
+        }
+
+        $form = $this->createForm('admin_reset_password', new ResetPasswordModel());
+
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                $user->setPlainPassword($data->plainPassword);
+
+                $this->getEventDispatcher()->dispatch(UserEvent::RESET_PASSWORD, new GenericEvent($user));
+
+                $this->addFlash('success', 'Your password has been reset successfully!');
+
+                return $this->redirect($this->generateUrl('admin_home'));
+            }
+        }
+
+        return array(
+            'form'              => $form->createView(),
+            'confirmationToken' => $confirmationToken,
+        );
+    }
+}

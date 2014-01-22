@@ -39,7 +39,7 @@ class BigfootRoleMenu
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -56,14 +56,14 @@ class BigfootRoleMenu
     public function setSlugs($slugs)
     {
         $this->slugs = $slugs;
-    
+
         return $this;
     }
 
     /**
      * Get slugs
      *
-     * @return array 
+     * @return array
      */
     public function getSlugs()
     {
@@ -79,14 +79,14 @@ class BigfootRoleMenu
     public function setRole($role)
     {
         $this->role = $role;
-    
+
         return $this;
     }
 
     /**
      * Get role
      *
-     * @return string 
+     * @return string
      */
     public function getRole()
     {
