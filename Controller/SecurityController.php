@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Bigfoot\Bundle\CoreBundle\Controller\BaseController;
 use Bigfoot\Bundle\UserBundle\Form\Model\ForgotPasswordModel;
 use Bigfoot\Bundle\UserBundle\Form\Model\ResetPasswordModel;
-use Bigfoot\Bundle\UserBundle\Event\UserEvents;
+use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 
 /**
  * BigfootUser controller.
@@ -140,7 +140,7 @@ class SecurityController extends BaseController
 
                 $user->setPlainPassword($data->plainPassword);
 
-                $this->getEventDispatcher()->dispatch(UserEvents::RESET_PASSWORD, new GenericEvent($user));
+                $this->getEventDispatcher()->dispatch(UserEvent::RESET_PASSWORD, new GenericEvent($user));
 
                 $this->addFlash('success', 'Your password has been reset successfully!');
 
