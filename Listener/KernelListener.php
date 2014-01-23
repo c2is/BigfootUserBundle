@@ -30,6 +30,6 @@ class KernelListener
 
     public function onLateKernelRequest(GetResponseEvent $event)
     {
-        $this->container->get('gedmo.listener.translatable')->setTranslatableLocale($event->getRequest()->getLocale());
+        $this->container->get('stof_doctrine_extensions.listener.translatable')->setTranslatableLocale($event->getRequest()->getLocale());
     }
 }
