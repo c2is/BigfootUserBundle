@@ -111,8 +111,8 @@ class BigfootUserController extends CrudController
     /**
      * Deletes a BigfootUser entity.
      *
-     * @Route("/{id}", name="admin_user_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="admin_user_delete")
+     * @Method("GET|DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
