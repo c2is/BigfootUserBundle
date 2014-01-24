@@ -1,8 +1,4 @@
 services:
-    kernel.listener.bigfoot_user_menu_listener:
-        class: Bigfoot\Bundle\UserBundle\Listener\MenuListener
-        tags:
-            - { name: kernel.event_listener, event: bigfoot.menu.generate, method: onMenuGenerate }
     kernel.listener.bigfoot_user_kernel_listener:
         class: Bigfoot\Bundle\UserBundle\Listener\KernelListener
         arguments: [ @service_container ]
@@ -18,7 +14,14 @@ services:
     # User Manager
     bigfoot_user.manager.user:
         class: Bigfoot\Bundle\UserBundle\Manager\UserManager
-        arguments: [ @doctrine.orm.entity_manager, @security.encoder_factory, @security.user_checker, @security.context, @session, @bigfoot_user.mailer.user, @bigfoot_core.generator.token_generator ]
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @security.encoder_factory
+            - @security.user_checker
+            - @security.context
+            - @session
+            - @bigfoot_user.mailer.user
+            - @bigfoot_core.generator.token_generator
     # User Mailer
     bigfoot_user.mailer.user:
         class: Bigfoot\Bundle\UserBundle\Mailer\UserMailer
@@ -26,7 +29,13 @@ services:
     # User Listener
     bigfoot_user.listener.user:
         class: Bigfoot\Bundle\UserBundle\Listener\UserListener
-        arguments: [ @bigfoot_user.manager.user ]
+        arguments:
+            - @bigfoot_user.manager.user
+        tags:
+            - { name: kernel.event_subscriber }
+    # Menu Listener
+    bigfoot_user.listener.menu:
+        class: Bigfoot\Bundle\UserBundle\Listener\MenuListener
         tags:
             - { name: kernel.event_subscriber }
     # User Type
@@ -37,7 +46,8 @@ services:
     # ForgotPassword Type
     bigfoot_user.form.type.forgot_password:
         class: Bigfoot\Bundle\UserBundle\Form\Type\ForgotPasswordType
-        arguments: [ @doctrine.orm.entity_manager ]
+        arguments:
+            - @doctrine.orm.entity_manager
         tags:
             - { name: form.type, alias: admin_forgot_password }
     # ResetPassword Type
