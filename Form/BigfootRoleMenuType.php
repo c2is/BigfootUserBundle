@@ -25,13 +25,13 @@ class BigfootRoleMenuType extends AbstractType
         $itemsTemp = array();
         $items = array();
 
-        $menuFactory = $this->container->get("bigfoot.menu_factory");
-        foreach ($menuFactory->getMenus() as $menu) {
-            $itemsTemp = array_merge($itemsTemp,$menu->getItems());
-        }
-        foreach ($itemsTemp as $item) {
-            $items[$item->getName()] = $item;
-        }
+        // $menuFactory = $this->container->get("bigfoot.menu_factory");
+        // foreach ($menuFactory->getMenus() as $menu) {
+        //     $itemsTemp = array_merge($itemsTemp,$menu->getItems());
+        // }
+        // foreach ($itemsTemp as $item) {
+        //     $items[$item->getName()] = $item;
+        // }
 
         $builder
             ->add('slugs', 'choice', array("choices" => $items, "multiple" => true))

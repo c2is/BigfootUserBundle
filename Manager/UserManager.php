@@ -70,16 +70,16 @@ class UserManager
     public function generateToken(BigfootUser $user)
     {
         $token = $this->tokenGenerator->generateToken();
-        $error = false;
+        $status = true;
 
         try {
             $this->userMailer->sendForgotPasswordMail($user, $token);
         } catch (Exception $e) {
-            $error   = true;
+            $status   = false;
             $message = "Couldn't send email, please contact an admin.";
         }
 
-        if ($error == false) {
+        if ($status == true) {
             $message = "Email sent check your inbox.";
 
             $user->setConfirmationToken($token);
@@ -90,7 +90,7 @@ class UserManager
         }
 
         return array(
-            'status'  => $error,
+            'status'  => $status,
             'message' => $message,
         );
     }

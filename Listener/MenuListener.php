@@ -2,26 +2,68 @@
 
 namespace Bigfoot\Bundle\UserBundle\Listener;
 
+use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 use Bigfoot\Bundle\CoreBundle\Event\MenuEvent;
-use Bigfoot\Bundle\CoreBundle\Theme\Menu\Item;
 
-class MenuListener
+/**
+ * Menu Listener
+ */
+class MenuListener implements EventSubscriberInterface
 {
-    public function onMenuGenerate(MenuEvent $event)
+    /**
+     * Get subscribed events
+     *
+     * @return array
+     */
+    public static function getSubscribedEvents()
     {
-        $menu = $event->getMenu();
+        return array(
+            MenuEvent::GENERATE_MAIN => 'onGenerateMain',
+        );
+    }
 
-        if ('toolbar_menu' == $menu->getName()) {
-            $menu->addItem(new Item('toolbar_user_settings', 'Settings', 'admin_user_account', array(), array(), 'settings'));
-            $menu->addItem(new Item('toolbar_user_logout', 'Logout', 'admin_logout', array(), array(), 'off'));
-        }
+    /**
+     * @param GenericEvent $event
+     */
+    public function onGenerateMain(GenericEvent $event)
+    {
+        $menu     = $event->getSubject();
+        $userMenu = $menu->getChild('user');
 
-        if ('sidebar_menu' == $menu->getName()) {
-            $menu->addItem(new Item('sidebar_user', 'User', 'admin_user', array(), null, 'group'));
-            $userMenu = new Item('sidebar_settings_user', 'User', null, array(), array(), 'group');
-            $userMenu->addChild(new Item('sidebar_settings_role', 'Role', 'admin_role', array(), array(), 'legal'));
-            $userMenu->addChild(new Item('sidebar_settings_role_menu', 'Menu access', 'admin_role_menu', array(), array(), null));
-            $menu->addOnItem('sidebar_settings', $userMenu);
-        }
+        $userMenu->addChild(
+            'user',
+            array(
+                'label'  => 'User',
+                'route'  => 'admin_user',
+                'extras' => array(
+                    'routes' => array(
+                        'admin_user_new',
+                        'admin_user_edit'
+                    )
+                ),
+                'linkAttributes' => array(
+                    'icon' => 'user',
+                )
+            )
+        );
+
+        $userMenu->addChild(
+            'role',
+            array(
+                'label'  => 'Role',
+                'route'  => 'admin_role',
+                'extras' => array(
+                    'routes' => array(
+                        'admin_role_new',
+                        'admin_role_edit'
+                    )
+                ),
+                'linkAttributes' => array(
+                    'icon' => 'legal',
+                )
+            )
+        );
     }
 }
