@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Serializable;
 
 use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * User
@@ -122,6 +123,34 @@ abstract class BigfootUser implements AdvancedUserInterface, Serializable
      * @ORM\JoinTable(name="bigfoot_user_role")
      */
     protected $roles;
+
+    /**
+     * @var datetime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var datetime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    protected $updated;
+
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\Column(type="string")
+     */
+    protected $createdBy;
+
+    /**
+     * @Gedmo\Blameable(on="update")
+     * @ORM\Column(type="string")
+     */
+    protected $updatedBy;
 
     public function __construct()
     {
@@ -360,6 +389,98 @@ abstract class BigfootUser implements AdvancedUserInterface, Serializable
     }
 
     /**
+     * Set created
+     *
+     * @param \DateTime $created
+     * @return BigfootUser
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     * @return BigfootUser
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Set createdBy
+     *
+     * @param string $createdBy
+     * @return BigfootUser
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return string
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set updatedBy
+     *
+     * @param string $updatedBy
+     * @return BigfootUser
+     */
+    public function setUpdatedBy($updatedBy)
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedBy
+     *
+     * @return string
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+
+    /**
      * (PHP 5 &gt;= 5.1.0)<br/>
      * String representation of object
      * @link http://php.net/manual/en/serializable.serialize.php
@@ -377,4 +498,14 @@ abstract class BigfootUser implements AdvancedUserInterface, Serializable
      * @return void
      */
     public function unserialize($serialized) {}
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getUsername();
+    }
 }

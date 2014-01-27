@@ -39,7 +39,7 @@ class BigfootRoleMenuController extends CrudController
         return 'BigfootUserBundle:BigfootRoleMenu';
     }
 
-    protected function getEntityLabel()
+    public function getEntityLabel()
     {
         return 'User role menu';
     }

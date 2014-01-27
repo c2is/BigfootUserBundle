@@ -44,7 +44,7 @@ class BigfootUserController extends CrudController
         return 'bigfoot_user';
     }
 
-    protected function getEntityLabel()
+    public function getEntityLabel()
     {
         return 'User';
     }
