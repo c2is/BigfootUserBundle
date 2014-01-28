@@ -22,10 +22,12 @@ services:
             - @session
             - @bigfoot_user.mailer.user
             - @bigfoot_core.generator.token_generator
+
     # User Mailer
     bigfoot_user.mailer.user:
         class: Bigfoot\Bundle\UserBundle\Mailer\UserMailer
         parent: bigfoot_core.mailer.abstract
+
     # User Listener
     bigfoot_user.listener.user:
         class: Bigfoot\Bundle\UserBundle\Listener\UserListener
@@ -33,16 +35,19 @@ services:
             - @bigfoot_user.manager.user
         tags:
             - { name: kernel.event_subscriber }
+
     # Menu Listener
     bigfoot_user.listener.menu:
         class: Bigfoot\Bundle\UserBundle\Listener\MenuListener
         tags:
             - { name: kernel.event_subscriber }
+
     # User Type
     bigfoot_user.form.type.user:
         class: Bigfoot\Bundle\UserBundle\Form\Type\BigfootUserType
         tags:
             - { name: form.type, alias: bigfoot_user }
+
     # ForgotPassword Type
     bigfoot_user.form.type.forgot_password:
         class: Bigfoot\Bundle\UserBundle\Form\Type\ForgotPasswordType
@@ -50,6 +55,7 @@ services:
             - @doctrine.orm.entity_manager
         tags:
             - { name: form.type, alias: admin_forgot_password }
+
     # ResetPassword Type
     bigfoot_user.form.type.reset_password:
         class: Bigfoot\Bundle\UserBundle\Form\Type\ResetPasswordType
