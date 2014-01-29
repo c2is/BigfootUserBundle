@@ -4,11 +4,12 @@
     <div id="login-box" class="login-box visible widget-box no-border">
         <div class="widget-body">
             <div class="widget-main">
-                <h4 class="header blue lighter bigger">
-                    {{ bigfoot_theme_values.title }}
+                <h4 class="header grey lighter bigger">
+                    {#{{ bigfoot_theme_values.title }}#}
+                    <img src="{{ asset("admin/images/customer/logo-seh.png") }}" alt="{{ bigfoot_theme_values.title }}">
                 </h4>
 
-                <div class="space-6"></div>
+                {#<div class="space-6"></div>#}
 
                 <form action="{{ path('admin_login_check') }}" method="post">
                     <fieldset>
@@ -30,33 +31,31 @@
                             </span>
                         </label>
 
-                        <label class="inline" for="remember_me">
+                        <label class="inline pull-left" for="remember_me">
                             <input class="ace" type="checkbox" id="remember_me" name="_remember_me" checked />
                             <span class="lbl"> {{ 'Remember Me' | trans }}</span>
                         </label>
 
-                        <div class="space"></div>
+                        {#<div class="space"></div>#}
 
                         <div class="clearfix">
-                            <button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
-                                <i class="icon-key"></i>
+                            <button type="submit" class="width-35 pull-right btn btn-sm btn-success">
+                               {# <i class="icon-key"></i>#}
                                 {{ 'Login'|trans }}
                             </button>
                         </div>
 
-                        <div class="space-4"></div>
+                        {#<div class="space-4"></div>#}
                     </fieldset>
                 </form>
             </div>
         </div>
 
-        <div class="toolbar clearfix">
-            <div>
-                <a href="#" onclick="show_box('forgot-box'); return false;" class="forgot-password-link">
-                    <i class="icon-arrow-left"></i>
-                    {{ 'I forgot my password'|trans }}
-                </a>
-            </div>
+        <div class="toolbar center light">
+            <a href="#" onclick="show_box('forgot-box'); return false;" class="forgot-password-link">
+                {#<i class="icon-arrow-left"></i>#}
+                {{ 'I forgot my password'|trans }}
+            </a>
         </div>
     </div>
 
