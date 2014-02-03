@@ -36,7 +36,10 @@ class BigfootUserController extends CrudController
 
     protected function getFields()
     {
-        return array('id' => 'ID', 'username' => 'Username');
+        return array(
+            'id'       => 'ID',
+            'username' => 'Username'
+        );
     }
 
     protected function getFormType()
@@ -54,18 +57,17 @@ class BigfootUserController extends CrudController
      *
      * @Route("/", name="admin_user")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:crud:index.html.twig")
      */
     public function indexAction()
     {
         return $this->doIndex();
     }
+
     /**
      * Creates a new BigfootUser entity.
      *
      * @Route("/", name="admin_user_create")
      * @Method("POST")
-     * @Template("BigfootCoreBundle:crud:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -77,7 +79,6 @@ class BigfootUserController extends CrudController
      *
      * @Route("/new", name="admin_user_new")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:crud:new.html.twig")
      */
     public function newAction()
     {
@@ -89,7 +90,6 @@ class BigfootUserController extends CrudController
      *
      * @Route("/{id}/edit", name="admin_user_edit")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:crud:edit.html.twig")
      */
     public function editAction($id)
     {
@@ -100,8 +100,7 @@ class BigfootUserController extends CrudController
      * Edits an existing BigfootUser entity.
      *
      * @Route("/{id}", name="admin_user_update")
-     * @Method("PUT")
-     * @Template("BigfootCoreBundle:crud:edit.html.twig")
+     * @Method("GET|POST|PUT")
      */
     public function updateAction(Request $request, $id)
     {

@@ -57,7 +57,7 @@ class BigfootRoleMenuController extends CrudController
      *
      * @Route("/", name="admin_role_menu")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:crud:index.html.twig")
+     * @Template("BigfootCoreBundle:Crud:index.html.twig")
      */
     public function indexAction()
     {
@@ -94,7 +94,7 @@ class BigfootRoleMenuController extends CrudController
      *
      * @Route("/{id}/edit", name="admin_role_menu_edit")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:crud:edit.html.twig")
+     * @Template("BigfootCoreBundle:Crud:form.html.twig")
      */
     public function editAction($id)
     {
@@ -140,7 +140,7 @@ class BigfootRoleMenuController extends CrudController
      * Edits an existing BigfootUser entity.
      *
      * @Route("/{role}", name="admin_role_menu_update")
-     * @Method("PUT")
+     * @Method("GET|PUT")
      * @Template("BigfootUserBundle:BigfootRoleMenu:edit.html.twig")
      */
     public function updateAction(Request $request, $role)
