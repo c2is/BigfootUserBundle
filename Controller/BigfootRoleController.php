@@ -41,14 +41,16 @@ class BigfootRoleController extends CrudController
 
     protected function getFields()
     {
-        return array('id' => 'ID', 'label' => 'Label');
+        return array(
+            'id'    => 'ID',
+            'label' => 'Label'
+        );
     }
     /**
      * Lists all BigfootRole entities.
      *
      * @Route("/", name="admin_role")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:crud:index.html.twig")
      */
     public function indexAction()
     {
@@ -59,7 +61,6 @@ class BigfootRoleController extends CrudController
      *
      * @Route("/", name="admin_role_create")
      * @Method("POST")
-     * @Template("BigfootCoreBundle:crud:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -71,7 +72,6 @@ class BigfootRoleController extends CrudController
      *
      * @Route("/new", name="admin_role_new")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:crud:new.html.twig")
      */
     public function newAction()
     {
@@ -83,7 +83,6 @@ class BigfootRoleController extends CrudController
      *
      * @Route("/{id}/edit", name="admin_role_edit")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:crud:edit.html.twig")
      */
     public function editAction($id)
     {
@@ -94,8 +93,7 @@ class BigfootRoleController extends CrudController
      * Edits an existing BigfootRole entity.
      *
      * @Route("/{id}", name="admin_role_update")
-     * @Method("PUT")
-     * @Template("BigfootCoreBundle:crud:edit.html.twig")
+     * @Method("GET|POST|PUT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -105,8 +103,8 @@ class BigfootRoleController extends CrudController
     /**
      * Deletes a BigfootRole entity.
      *
-     * @Route("/{id}", name="admin_role_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="admin_role_delete")
+     * @Method("GET|DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
