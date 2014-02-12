@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\DependencyInjection\Container;
 
-class BigfootRoleMenuType extends AbstractType
+class RoleMenuType extends AbstractType
 {
     private $container;
 
@@ -23,7 +23,7 @@ class BigfootRoleMenuType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $itemsTemp = array();
-        $items = array();
+        $items     = array();
 
         // $menuFactory = $this->container->get("bigfoot.menu_factory");
         // foreach ($menuFactory->getMenus() as $menu) {
@@ -43,9 +43,11 @@ class BigfootRoleMenuType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Bigfoot\Bundle\UserBundle\Entity\BigfootRoleMenu'
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'Bigfoot\Bundle\UserBundle\Entity\RoleMenu'
+            )
+        );
     }
 
     /**
@@ -53,6 +55,6 @@ class BigfootRoleMenuType extends AbstractType
      */
     public function getName()
     {
-        return 'bigfootrolemenutype';
+        return 'rolemenutype';
     }
 }

@@ -11,12 +11,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Bigfoot\Bundle\CoreBundle\Controller\CrudController;
 
 /**
- * BigfootRole controller.
+ * Role controller.
  *
  * @Cache(maxage="0", smaxage="0", public="false")
- * @Route("/admin/role")
+ * @Route("/role")
  */
-class BigfootRoleController extends CrudController
+class RoleController extends CrudController
 {
     /**
      * @return string
@@ -31,7 +31,7 @@ class BigfootRoleController extends CrudController
      */
     protected function getEntity()
     {
-        return 'BigfootUserBundle:BigfootRole';
+        return 'BigfootUserBundle:Role';
     }
 
     protected function getEntityLabel()
@@ -46,65 +46,45 @@ class BigfootRoleController extends CrudController
             'label' => 'Label'
         );
     }
+
+    protected function getFormType()
+    {
+        return 'admin_role';
+    }
+
     /**
-     * Lists all BigfootRole entities.
+     * List Role entities.
      *
      * @Route("/", name="admin_role")
-     * @Method("GET")
      */
     public function indexAction()
     {
         return $this->doIndex();
     }
     /**
-     * Creates a new BigfootRole entity.
-     *
-     * @Route("/", name="admin_role_create")
-     * @Method("POST")
-     */
-    public function createAction(Request $request)
-    {
-        return $this->doCreate($request);
-    }
-
-    /**
-     * Displays a form to create a new BigfootRole entity.
+     * New Role entity.
      *
      * @Route("/new", name="admin_role_new")
-     * @Method("GET")
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
-        return $this->doNew();
+        return $this->doNew($request);
     }
 
     /**
-     * Displays a form to edit an existing BigfootRole entity.
+     * Edit Role entity.
      *
-     * @Route("/{id}/edit", name="admin_role_edit")
-     * @Method("GET")
+     * @Route("/edit/{id}", name="admin_role_edit")
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
-        return $this->doEdit($id);
+        return $this->doEdit($request, $id);
     }
 
     /**
-     * Edits an existing BigfootRole entity.
+     * Delete Role entity.
      *
-     * @Route("/{id}", name="admin_role_update")
-     * @Method("GET|POST|PUT")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        return $this->doUpdate($request, $id);
-    }
-
-    /**
-     * Deletes a BigfootRole entity.
-     *
-     * @Route("/{id}/delete", name="admin_role_delete")
-     * @Method("GET|DELETE")
+     * @Route("/delete/{id}", name="admin_role_delete")
      */
     public function deleteAction(Request $request, $id)
     {

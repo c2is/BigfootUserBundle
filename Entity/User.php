@@ -5,15 +5,15 @@ namespace Bigfoot\Bundle\UserBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Bigfoot\Bundle\UserBundle\Model\BigfootUser as BaseUser;
+use Bigfoot\Bundle\UserBundle\Model\User as BaseUser;
 
 /**
- * BigfootUser
+ * User
  *
  * @ORM\Table(name="bigfoot_user")
- * @ORM\Entity(repositoryClass="Bigfoot\Bundle\UserBundle\Entity\BigfootUserRepository")
+ * @ORM\Entity(repositoryClass="Bigfoot\Bundle\UserBundle\Entity\UserRepository")
  */
-class BigfootUser extends BaseUser
+class User extends BaseUser
 {
     /**
      * @var integer
@@ -32,7 +32,7 @@ class BigfootUser extends BaseUser
     private $fullName;
 
     /**
-     * Construct BigfootUser
+     * Construct User
      */
     public function __construct()
     {
@@ -63,7 +63,7 @@ class BigfootUser extends BaseUser
      * Set full name
      *
      * @param string $fullName
-     * @return BigfootUser
+     * @return User
      */
     public function setFullname($fullName)
     {

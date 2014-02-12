@@ -9,7 +9,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Doctrine\ORM\EntityManager;
 
-use Bigfoot\Bundle\UserBundle\Entity\BigfootUser;
+use Bigfoot\Bundle\UserBundle\Entity\User;
 use Bigfoot\Bundle\UserBundle\Manager\UserManager;
 use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 
@@ -45,7 +45,7 @@ class UserListener implements EventSubscriberInterface
     {
         $user = $event->getAuthenticationToken()->getUser();
 
-        if ($user instanceof BigfootUser) {
+        if ($user instanceof User) {
             $user->setLastLogin(new \DateTime());
             $this->userManager->updateUser($user);
         }

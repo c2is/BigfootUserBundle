@@ -8,12 +8,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Serializable;
 
-use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
+use Bigfoot\Bundle\UserBundle\Entity\Role;
 
 /**
  * User
  */
-abstract class BigfootUser implements AdvancedUserInterface, Serializable
+abstract class User implements AdvancedUserInterface, Serializable
 {
     const ROLE_DEFAULT = 'ROLE_USER';
 
@@ -118,7 +118,7 @@ abstract class BigfootUser implements AdvancedUserInterface, Serializable
     protected $expiresAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity="BigfootRole", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
      * @ORM\JoinTable(name="bigfoot_user_role")
      */
     protected $roles;
@@ -137,7 +137,7 @@ abstract class BigfootUser implements AdvancedUserInterface, Serializable
      *
      * @return BigfootUser
      */
-    public function addRole(BigfootRole $role)
+    public function addRole(Role $role)
     {
         if (!$this->roles->contains($role)) {
             $this->roles->add($role);
