@@ -47,7 +47,7 @@ class UserController extends CrudController
         return 'admin_user';
     }
 
-    protected function getEntityLabel()
+    public function getEntityLabel()
     {
         return 'User';
     }

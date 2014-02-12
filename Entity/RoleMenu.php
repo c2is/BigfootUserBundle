@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * RoleMenu
  *
- * @ORM\Table()
+ * @ORM\Table(name="bigfoot_role_menu")
  * @ORM\Entity
  */
 class RoleMenu
@@ -35,7 +35,6 @@ class RoleMenu
      */
     private $role;
 
-
     /**
      * Get id
      *
@@ -46,12 +45,11 @@ class RoleMenu
         return $this->id;
     }
 
-
     /**
      * Set slugs
      *
      * @param array $slugs
-     * @return BigfootRoleMenu
+     * @return $this
      */
     public function setSlugs($slugs)
     {
@@ -74,7 +72,7 @@ class RoleMenu
      * Set role
      *
      * @param string $role
-     * @return BigfootRoleMenu
+     * @return $this
      */
     public function setRole($role)
     {

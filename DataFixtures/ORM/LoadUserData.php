@@ -8,9 +8,6 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Bigfoot\Bundle\UserBundle\Entity\Role;
-use Bigfoot\Bundle\UserBundle\Entity\User;
-
 class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     public $container;
