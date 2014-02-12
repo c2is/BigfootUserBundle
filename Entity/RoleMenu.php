@@ -5,12 +5,12 @@ namespace Bigfoot\Bundle\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BigfootRoleMenu
+ * RoleMenu
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class BigfootRoleMenu
+class RoleMenu
 {
     /**
      * @var integer

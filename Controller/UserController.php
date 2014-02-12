@@ -2,68 +2,101 @@
 
 namespace Bigfoot\Bundle\UserBundle\Controller;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\SecurityContext;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
-use Bigfoot\Bundle\CoreBundle\Controller\BaseController;
-use Bigfoot\Bundle\UserBundle\Form\Type\BigfootUserType;
+use Bigfoot\Bundle\CoreBundle\Controller\CrudController;
 
 /**
- * BigfootUser controller.
+ * User controller.
  *
  * @Cache(maxage="0", smaxage="0", public="false")
- * @Route("/admin")
+ * @Route("/user")
  */
-class UserController extends BaseController
+class UserController extends CrudController
 {
     /**
-     * @Route("/account", name="admin_user_account")
-     * @Template()
+     * @return string
      */
-    public function accountAction(Request $request)
+    protected function getName()
     {
-        $user = $this->getUser();
+        return 'admin_user';
+    }
 
-        if (!$user) {
-            throw new NotFoundHttpException('No user account found');
-        }
+    /**
+     * @return string
+     */
+    protected function getEntity()
+    {
+        return 'BigfootUserBundle:User';
+    }
 
-        $form = $this->createForm('bigfoot_user', $user);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $this->persistAndFlush($user);
-
-            $this->addFlash(
-                'success',
-                $this->render(
-                    'BigfootCoreBundle:includes:flash.html.twig',
-                    array(
-                        'icon'    => 'ok',
-                        'heading' => 'Success!',
-                        'message' => 'Your account has been updated.',
-                    )
-                )
-            );
-        }
-
+    protected function getFields()
+    {
         return array(
-            'form'        => $form->createView(),
-            'form_method' => 'POST',
-            'form_action' => $this->generateUrl('admin_user_account'),
-            'form_title'  => 'My account',
-            'isAjax'      => $this->getRequest()->isXmlHttpRequest(),
-            'breadcrumbs' => array(
-                array(
-                    'label' => 'My account',
-                ),
-            ),
+            'id'       => 'ID',
+            'username' => 'Username'
         );
+    }
+
+    protected function getFormType()
+    {
+        return 'admin_user';
+    }
+
+    protected function getEntityLabel()
+    {
+        return 'User';
+    }
+
+    /**
+     * Lists User entities.
+     *
+     * @Route("/", name="admin_user")
+     */
+    public function indexAction()
+    {
+        return $this->doIndex();
+    }
+
+    /**
+     * New User entity.
+     *
+     * @Route("/new", name="admin_user_new")
+     */
+    public function newAction(Request $request)
+    {
+        return $this->doNew($request);
+    }
+
+    /**
+     * Edit User entity.
+     *
+     * @Route("/edit/{id}", name="admin_user_edit")
+     */
+    public function editAction(Request $request, $id)
+    {
+        return $this->doEdit($request, $id);
+    }
+
+    /**
+     * Delete User entity.
+     *
+     * @Route("/delete/{id}", name="admin_user_delete")
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        return $this->doDelete($request, $id);
+    }
+
+    /**
+     * PrePersist User entity.
+     */
+    protected function prePersist($user)
+    {
+        $this->getUserManager()->updatePassword($user);
     }
 }

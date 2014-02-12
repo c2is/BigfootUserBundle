@@ -6,9 +6,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
+use Bigfoot\Bundle\UserBundle\Entity\Role;
 
-class LoadBigfootRoleData extends AbstractFixture implements OrderedFixtureInterface
+class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * Load data fixtures with the passed EntityManager
@@ -17,14 +17,14 @@ class LoadBigfootRoleData extends AbstractFixture implements OrderedFixtureInter
      */
     public function load(ObjectManager $manager)
     {
-        $roleAdmin = new BigfootRole();
+        $roleAdmin = new Role();
         $roleAdmin
             ->setName('ROLE_ADMIN')
             ->setLabel('Admin');
 
         $this->setReference('ROLE_ADMIN', $roleAdmin);
 
-        $roleUser = new BigfootRole();
+        $roleUser = new Role();
         $roleUser
             ->setName('ROLE_USER')
             ->setLabel('User');

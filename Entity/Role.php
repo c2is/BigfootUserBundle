@@ -9,12 +9,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Serializable;
 
 /**
- * BigfootRole
+ * Role
  *
  * @ORM\Table(name="bigfoot_role")
- * @ORM\Entity(repositoryClass="Bigfoot\Bundle\UserBundle\Entity\BigfootRoleRepository")
+ * @ORM\Entity(repositoryClass="Bigfoot\Bundle\UserBundle\Entity\RoleRepository")
  */
-class BigfootRole implements RoleInterface, Serializable
+class Role implements RoleInterface, Serializable
 {
     /**
      * @var integer
@@ -41,7 +41,7 @@ class BigfootRole implements RoleInterface, Serializable
     private $label;
 
     /**
-     * @ORM\ManyToMany(targetEntity="BigfootUser", mappedBy="roles")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
      */
     private $users;
 

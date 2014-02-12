@@ -1,12 +1,12 @@
 <?php
 
-namespace Bigfoot\Bundle\UserBundle\Form;
+namespace Bigfoot\Bundle\UserBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class BigfootRoleType extends AbstractType
+class RoleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -19,13 +19,15 @@ class BigfootRoleType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Bigfoot\Bundle\UserBundle\Entity\BigfootRole'
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'Bigfoot\Bundle\UserBundle\Entity\Role'
+            )
+        );
     }
 
     public function getName()
     {
-        return 'bigfoot_bundle_userbundle_bigfootroletype';
+        return 'admin_role';
     }
 }

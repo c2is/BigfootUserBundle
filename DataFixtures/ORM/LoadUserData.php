@@ -8,10 +8,10 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Bigfoot\Bundle\UserBundle\Entity\BigfootRole;
-use Bigfoot\Bundle\UserBundle\Entity\BigfootUser;
+use Bigfoot\Bundle\UserBundle\Entity\Role;
+use Bigfoot\Bundle\UserBundle\Entity\User;
 
-class LoadBigfootUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     public $container;
 
@@ -37,14 +37,20 @@ class LoadBigfootUserData extends AbstractFixture implements OrderedFixtureInter
             ->setFullname('Administrator')
             ->setEmail('admin@c2is.fr')
             ->setLocale('en')
-            ->addRole($roleAdmin)
-            ->setCreated(new \DateTime())
-            ->setUpdated(new \DateTime())
-            ->setCreatedBy('system')
-            ->setUpdatedBy('system');
+            ->addRole($roleAdmin);
         $userManager->updatePassword($admin);
 
+        $admin2 = $userManager
+            ->createUser()
+            ->setUsername('testAdmin')
+            ->setPlainPassword('testAdmin')
+            ->setFullname('testAdministrator')
+            ->setEmail('testAdmin@c2is.fr')
+            ->setLocale('en');
+        $userManager->updatePassword($admin2);
+
         $manager->persist($admin);
+        $manager->persist($admin2);
 
         $manager->flush();
     }

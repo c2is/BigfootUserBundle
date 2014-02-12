@@ -12,16 +12,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 use Bigfoot\Bundle\CoreBundle\Controller\CrudController;
 use Bigfoot\Bundle\CoreBundle\Theme\Menu\Item;
-use Bigfoot\Bundle\UserBundle\Form\BigfootRoleMenuType;
-use Bigfoot\Bundle\UserBundle\Entity\BigfootRoleMenu;
+use Bigfoot\Bundle\UserBundle\Form\RoleMenuType;
+use Bigfoot\Bundle\UserBundle\Entity\RoleMenu;
 
 /**
- * BigfootRoleMenu controller.
+ * RoleMenu controller.
  *
  * @Cache(maxage="0", smaxage="0", public="false")
- * @Route("/admin/role/menu")
+ * @Route("/role/menu")
  */
-class BigfootRoleMenuController extends CrudController
+class RoleMenuController extends CrudController
 {
     /**
      * @return string
@@ -36,7 +36,7 @@ class BigfootRoleMenuController extends CrudController
      */
     protected function getEntity()
     {
-        return 'BigfootUserBundle:BigfootRoleMenu';
+        return 'BigfootUserBundle:RoleMenu';
     }
 
     public function getEntityLabel()
@@ -47,23 +47,23 @@ class BigfootRoleMenuController extends CrudController
     public function getFields()
     {
         return array(
-            'name' => 'Name',
+            'name'  => 'Name',
             'label' => 'Label',
         );
     }
 
     /**
-     * Lists all BigfootRole entities.
+     * Lists all Role entities.
      *
      * @Route("/", name="admin_role_menu")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:Crud:index.html.twig")
+     * @Template("BigfootCoreBundle:crud:index.html.twig")
      */
     public function indexAction()
     {
         $em = $this->container->get('doctrine')->getManager();
 
-        $entities = $em->getRepository('BigfootUserBundle:BigfootRole')->findAll();
+        $entities = $em->getRepository('BigfootUserBundle:Role')->findAll();
 
         if (method_exists($this, 'newAction')) {
             $theme = $this->container->get('bigfoot.theme');
@@ -90,31 +90,31 @@ class BigfootRoleMenuController extends CrudController
     }
 
     /**
-     * Displays a form to edit an existing BigfootRole entity.
+     * Displays a form to edit an existing Role entity.
      *
      * @Route("/{id}/edit", name="admin_role_menu_edit")
      * @Method("GET")
-     * @Template("BigfootCoreBundle:Crud:form.html.twig")
+     * @Template("BigfootCoreBundle:crud:form.html.twig")
      */
     public function editAction($id)
     {
         $em = $this->container->get('doctrine')->getManager();
 
         $repository = $this->container->get('doctrine')
-            ->getRepository('BigfootUserBundle:BigfootRole');
+            ->getRepository('BigfootUserBundle:Role');
 
         $role = $repository->findOneById($id);
 
-        $entity = $em->getRepository('BigfootUserBundle:BigfootRoleMenu')->findOneBy(array('role' => $role->getName()));
+        $entity = $em->getRepository('BigfootUserBundle:RoleMenu')->findOneBy(array('role' => $role->getName()));
 
         if (!$entity) {
-            $entity = new BigfootRoleMenu();
+            $entity = new RoleMenu();
             $entity->setRole($role->getName());
             $em->persist($entity);
             $em->flush();
         }
 
-        $editForm = $this->container->get('form.factory')->create('bigfootrolemenutype', $entity);
+        $editForm = $this->container->get('form.factory')->create('rolemenutype', $entity);
 
         return array(
             'form'                  => $editForm->createView(),
@@ -137,24 +137,24 @@ class BigfootRoleMenuController extends CrudController
     }
 
     /**
-     * Edits an existing BigfootUser entity.
+     * Edits an existing User entity.
      *
      * @Route("/{role}", name="admin_role_menu_update")
      * @Method("GET|PUT")
-     * @Template("BigfootUserBundle:BigfootRoleMenu:edit.html.twig")
+     * @Template("BigfootUserBundle:RoleMenu:edit.html.twig")
      */
     public function updateAction(Request $request, $role)
     {
         $em = $this->container->get('doctrine')->getManager();
 
-        $entity = $em->getRepository('BigfootUserBundle:BigfootRoleMenu')->findOneBy(array("role" => $role));
+        $entity = $em->getRepository('BigfootUserBundle:RoleMenu')->findOneBy(array("role" => $role));
 
         if (!$entity) {
-            $entity = new BigfootRoleMenu();
+            $entity = new RoleMenu();
             $entity->setRole($role);
         }
 
-        $editForm = $this->container->get('form.factory')->create('bigfootrolemenutype', $entity);
+        $editForm = $this->container->get('form.factory')->create('rolemenutype', $entity);
         $editForm->submit($request);
 
         if ($editForm->isValid()) {

@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 
-use Bigfoot\Bundle\UserBundle\Entity\BigfootUser;
+use Bigfoot\Bundle\UserBundle\Entity\User;
 use Bigfoot\Bundle\UserBundle\Mailer\UserMailer;
 use Bigfoot\Bundle\CoreBundle\Generator\TokenGenerator;
 
@@ -39,10 +39,10 @@ class UserManager
 
     public function createUser()
     {
-        return new BigfootUser();
+        return new User();
     }
 
-    public function loginUser($firewallName, BigfootUser $user)
+    public function loginUser($firewallName, User $user)
     {
         $this->userChecker->checkPostAuth($user);
 
@@ -51,14 +51,14 @@ class UserManager
         $this->securityContext->setToken($token);
     }
 
-    public function updateUser(BigfootUser $user)
+    public function updateUser(User $user)
     {
         $this->updatePassword($user);
         $this->entityManager->persist($user);
         $this->entityManager->flush($user);
     }
 
-    public function updatePassword(BigfootUser $user)
+    public function updatePassword(User $user)
     {
         if (0 !== strlen($password = $user->getPlainPassword())) {
             $encoder = $this->getEncoder($user);
@@ -67,7 +67,7 @@ class UserManager
         }
     }
 
-    public function generateToken(BigfootUser $user)
+    public function generateToken(User $user)
     {
         $token = $this->tokenGenerator->generateToken();
         $status = true;
@@ -95,12 +95,12 @@ class UserManager
         );
     }
 
-    protected function getEncoder(BigfootUser $user)
+    protected function getEncoder(User $user)
     {
         return $this->encoderFactory->getEncoder($user);
     }
 
-    protected function createToken($firewall, BigfootUser $user)
+    protected function createToken($firewall, User $user)
     {
         return new UsernamePasswordToken($user, null, $firewall, $user->getRoles());
     }

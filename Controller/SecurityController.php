@@ -20,13 +20,12 @@ use Bigfoot\Bundle\UserBundle\Event\UserEvent;
  * BigfootUser controller.
  *
  * @Cache(maxage="0", smaxage="0", public="false")
- * @Route("/admin")
+ * @Route("/")
  */
 class SecurityController extends BaseController
 {
     /**
      * @Route("/login", name="admin_login")
-     * @Template()
      */
     public function loginAction(Request $request)
     {
@@ -41,9 +40,12 @@ class SecurityController extends BaseController
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         }
 
-        return array(
-            'last_username' => $session->get(SecurityContext::LAST_USERNAME),
-            'error'         => $error,
+        return $this->render(
+            $this->getThemeBundle().':user:login.html.twig',
+            array(
+                'last_username' => $session->get(SecurityContext::LAST_USERNAME),
+                'error'         => $error,
+            )
         );
     }
 
@@ -65,7 +67,6 @@ class SecurityController extends BaseController
      * Forgot password
      *
      * @Route("/forgot-password", name="admin_forgot_password")
-     * @Template()
      */
     public function forgotPasswordAction(Request $request)
     {
@@ -78,40 +79,28 @@ class SecurityController extends BaseController
                 $user = $form->get('email')->getData();
 
                 if ($user->isPasswordRequestNonExpired($this->container->getParameter('bigfoot_user.resetting.token_ttl'))) {
-                    return new JsonResponse(
-                        array(
-                            'status'  => false,
-                            'message' => 'Request already sent, check your emails.',
-                        )
-                    );
+                    return $this->renderAjax(false, 'Request already sent, check your emails.');
                 }
 
                 $token = $this->getUserManager()->generateToken($user);
 
                 if ($request->isXmlHttpRequest()) {
-                    return new JsonResponse(
-                        array(
-                            'status'  => $token['status'],
-                            'message' => $token['message'],
-                        )
-                    );
+                    return $this->renderAjax($token['status'], $token['message']);
                 } else {
                     return $this->redirect($this->generateUrl('forgot_password'));
                 }
             } else {
                 if ($request->isXmlHttpRequest()) {
-                    return new JsonResponse(
-                        array(
-                            'status'  => false,
-                            'message' => 'Invalid email.',
-                        )
-                    );
+                    return $this->renderAjax(false, 'Invalid email.');
                 }
             }
         }
 
-        return array(
-            'form' => $form->createView(),
+        return $this->render(
+            $this->getThemeBundle().':user:forgot_password.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
         );
     }
 
@@ -119,11 +108,10 @@ class SecurityController extends BaseController
      * Reset password
      *
      * @Route("/reset-password/{confirmationToken}", name="admin_reset_password")
-     * @Template()
      */
     public function resetPasswordAction(Request $request, $confirmationToken)
     {
-        $user     = $this->getRepository('BigfootUserBundle:BigfootUser')->findOneByConfirmationToken($confirmationToken);
+        $user     = $this->getRepository('BigfootUserBundle:User')->findOneByConfirmationToken($confirmationToken);
         $tokenTtl = $this->container->getParameter('bigfoot_user.resetting.token_ttl');
 
         if (!$user || !$user->isPasswordRequestNonExpired($tokenTtl)) {
@@ -148,9 +136,12 @@ class SecurityController extends BaseController
             }
         }
 
-        return array(
-            'form'              => $form->createView(),
-            'confirmationToken' => $confirmationToken,
+        return $this->render(
+            $this->getThemeBundle().':user:reset_password.html.twig',
+            array(
+                'form'              => $form->createView(),
+                'confirmationToken' => $confirmationToken,
+            )
         );
     }
 }

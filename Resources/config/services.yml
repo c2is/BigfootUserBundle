@@ -21,7 +21,7 @@ services:
             - @security.context
             - @session
             - @bigfoot_user.mailer.user
-            - @bigfoot_core.generator.token_generator
+            - @bigfoot_core.generator.token
 
     # User Mailer
     bigfoot_user.mailer.user:
@@ -44,9 +44,11 @@ services:
 
     # User Type
     bigfoot_user.form.type.user:
-        class: Bigfoot\Bundle\UserBundle\Form\Type\BigfootUserType
+        class: Bigfoot\Bundle\UserBundle\Form\Type\UserType
+        arguments:
+            - @security.context
         tags:
-            - { name: form.type, alias: bigfoot_user }
+            - { name: form.type, alias: admin_user }
 
     # ForgotPassword Type
     bigfoot_user.form.type.forgot_password:
@@ -61,3 +63,9 @@ services:
         class: Bigfoot\Bundle\UserBundle\Form\Type\ResetPasswordType
         tags:
             - { name: form.type, alias: admin_reset_password }
+
+    # Role Type
+    bigfoot_user.form.type.role:
+        class: Bigfoot\Bundle\UserBundle\Form\Type\RoleType
+        tags:
+            - { name: form.type, alias: admin_role }

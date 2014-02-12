@@ -5,9 +5,17 @@ namespace Bigfoot\Bundle\UserBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
-class BigfootUserType extends AbstractType
+class UserType extends AbstractType
 {
+    private $securityContext;
+
+    public function __construct(SecurityContextInterface $securityContext)
+    {
+        $this->securityContext = $securityContext;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -23,15 +31,21 @@ class BigfootUserType extends AbstractType
                         'en' => 'en'
                     )
                 )
-            )
-            ->add(
-                'formRoles',
-                'entity',
-                array(
-                    'class'    => 'BigfootUserBundle:BigfootRole',
-                    'multiple' => true,
-                )
-            )
+            );
+
+        if ($this->securityContext->isGranted('ROLE_ADMIN')) {
+            $builder
+                ->add(
+                    'formRoles',
+                    'entity',
+                    array(
+                        'class'    => 'BigfootUserBundle:Role',
+                        'multiple' => true,
+                    )
+                );
+        }
+
+        $builder
             ->add(
                 'plainPassword',
                 'repeated',
@@ -46,13 +60,13 @@ class BigfootUserType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Bigfoot\Bundle\UserBundle\Entity\BigfootUser'
+                'data_class' => 'Bigfoot\Bundle\UserBundle\Entity\User'
             )
         );
     }
 
     public function getName()
     {
-        return 'bigfoot_user';
+        return 'admin_user';
     }
 }
