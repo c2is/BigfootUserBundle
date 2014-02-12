@@ -11,7 +11,7 @@ class UserMailer extends AbstractMailer
 {
     public function sendForgotPasswordMail(User $user, $token)
     {
-        $body = $this->templating->render(
+        $body = $this->getTemplating()->renderView(
             'BigfootUserBundle:Mail:forgot_password.html.twig',
             array(
                 'token' => $token,
