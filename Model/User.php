@@ -13,6 +13,8 @@ use Bigfoot\Bundle\UserBundle\Entity\Role;
 
 /**
  * User
+ *
+ * @ORM\MappedSuperclass
  */
 abstract class User implements AdvancedUserInterface, Serializable
 {
