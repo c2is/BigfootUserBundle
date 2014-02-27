@@ -95,7 +95,7 @@ class UserController extends CrudController
     /**
      * PrePersist User entity.
      */
-    protected function prePersist($user)
+    protected function prePersist($user, $action)
     {
         $this->getUserManager()->updatePassword($user);
     }
