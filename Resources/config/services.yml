@@ -48,6 +48,7 @@ services:
         class: Bigfoot\Bundle\UserBundle\Form\Type\UserType
         arguments:
             - @security.context
+            - %bigfoot_core.languages.front%
         tags:
             - { name: form.type, alias: admin_user }
 

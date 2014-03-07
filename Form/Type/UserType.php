@@ -11,13 +11,19 @@ class UserType extends AbstractType
 {
     private $securityContext;
 
-    public function __construct(SecurityContextInterface $securityContext)
+    private $languages;
+
+    public function __construct(SecurityContextInterface $securityContext, array $languages)
     {
-        $this->securityContext = $securityContext;
+        $this->securityContext  = $securityContext;
+        $this->languages        = $languages;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $langs = array_keys($this->languages);
+        $langChoices = array_combine($langs, $langs);
+
         $builder
             ->add('username')
             ->add('email')
@@ -26,10 +32,7 @@ class UserType extends AbstractType
                 'locale',
                 'choice',
                 array(
-                    'choices' => array(
-                        'fr' => 'fr',
-                        'en' => 'en'
-                    )
+                    'choices' => $langChoices
                 )
             );
 
