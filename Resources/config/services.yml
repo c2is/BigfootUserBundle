@@ -39,6 +39,7 @@ services:
     # Menu Listener
     bigfoot_user.listener.menu:
         class: Bigfoot\Bundle\UserBundle\Listener\MenuListener
+        arguments: [@security.context]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -47,6 +48,7 @@ services:
         class: Bigfoot\Bundle\UserBundle\Form\Type\UserType
         arguments:
             - @security.context
+            - %bigfoot_core.languages.front%
         tags:
             - { name: form.type, alias: admin_user }
 
