@@ -1,6 +1,6 @@
 <?php
 
-namespace Bigfoot\Bundle\UserBundle\Listener;
+namespace Bigfoot\Bundle\UserBundle\Subscriber;
 
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -9,9 +9,9 @@ use Bigfoot\Bundle\CoreBundle\Event\MenuEvent;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
- * Menu Listener
+ * Menu Subscriber
  */
-class MenuListener implements EventSubscriberInterface
+class MenuSubscriber implements EventSubscriberInterface
 {
     /**
      * @var \Symfony\Component\Security\Core\SecurityContextInterface
@@ -43,10 +43,28 @@ class MenuListener implements EventSubscriberInterface
      */
     public function onGenerateMain(GenericEvent $event)
     {
-        $menu     = $event->getSubject();
-        $userMenu = $menu->getChild('user');
+        $menu = $event->getSubject();
+        $root = $menu->getRoot();
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
+            $userMenu = $root->addChild(
+                'user',
+                array(
+                    'label'          => 'Users',
+                    'url'            => '#',
+                    'linkAttributes' => array(
+                        'class' => 'dropdown-toggle',
+                        'icon'  => 'group',
+                    )
+                )
+            );
+
+            $userMenu->setChildrenAttributes(
+                array(
+                    'class' => 'submenu',
+                )
+            );
+
             $userMenu->addChild(
                 'user',
                 array(

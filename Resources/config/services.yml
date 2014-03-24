@@ -11,6 +11,14 @@ services:
         tags:
             - { name: form.type, alias: bigfootrolemenutype }
 
+    # Menu Subscriber
+    bigfoot_user.subscriber.menu:
+        class: Bigfoot\Bundle\UserBundle\Subscriber\MenuSubscriber
+        arguments:
+            - @security.context
+        tags:
+            - { name: kernel.event_subscriber }
+
     # User Manager
     bigfoot_user.manager.user:
         class: Bigfoot\Bundle\UserBundle\Manager\UserManager
@@ -33,13 +41,6 @@ services:
         class: Bigfoot\Bundle\UserBundle\Listener\UserListener
         arguments:
             - @bigfoot_user.manager.user
-        tags:
-            - { name: kernel.event_subscriber }
-
-    # Menu Listener
-    bigfoot_user.listener.menu:
-        class: Bigfoot\Bundle\UserBundle\Listener\MenuListener
-        arguments: [@security.context]
         tags:
             - { name: kernel.event_subscriber }
 
