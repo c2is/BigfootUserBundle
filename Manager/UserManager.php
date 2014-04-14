@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Bigfoot\Bundle\UserBundle\Entity\User;
 use Bigfoot\Bundle\UserBundle\Mailer\UserMailer;
 use Bigfoot\Bundle\CoreBundle\Generator\TokenGenerator;
-use Bigfoot\Bundle\ContextBundle\Service\ContextService;
+use Bigfoot\Bundle\ContextBundle\Service\ContextService as Context;
 
 /**
  * UserManager
@@ -25,19 +25,19 @@ class UserManager
     private $userChecker;
     private $securityContext;
     private $session;
-    private $contextService;
+    private $context;
     private $userMailer;
     private $tokenGenerator;
     private $request;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, UserCheckerInterface $userChecker, SecurityContextInterface $securityContext, SessionInterface $session, ContextService $contextService, UserMailer $userMailer, TokenGenerator $tokenGenerator)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, UserCheckerInterface $userChecker, SecurityContextInterface $securityContext, SessionInterface $session, Context $context, UserMailer $userMailer, TokenGenerator $tokenGenerator)
     {
         $this->entityManager   = $entityManager;
         $this->encoderFactory  = $encoderFactory;
         $this->userChecker     = $userChecker;
         $this->securityContext = $securityContext;
         $this->session         = $session;
-        $this->contextService  = $contextService;
+        $this->context         = $context;
         $this->userMailer      = $userMailer;
         $this->tokenGenerator  = $tokenGenerator;
     }
