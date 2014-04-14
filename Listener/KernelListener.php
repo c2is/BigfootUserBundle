@@ -32,7 +32,7 @@ class KernelListener
         if ($locale = $request->getSession()->get('_locale', false)) {
             $request->setLocale($locale);
         } elseif (!$token) {
-            $request->setLocale('en');
+            $request->setLocale($token->getUser()->getLocale());
         } else {
             $request->setLocale($request->getPreferredLanguage());
         }
