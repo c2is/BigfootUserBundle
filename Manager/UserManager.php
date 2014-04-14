@@ -2,6 +2,7 @@
 
 namespace Bigfoot\Bundle\UserBundle\Manager;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -12,6 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Bigfoot\Bundle\UserBundle\Entity\User;
 use Bigfoot\Bundle\UserBundle\Mailer\UserMailer;
 use Bigfoot\Bundle\CoreBundle\Generator\TokenGenerator;
+use Bigfoot\Bundle\ContextBundle\Service\ContextService;
 
 /**
  * UserManager
@@ -23,18 +25,26 @@ class UserManager
     private $userChecker;
     private $securityContext;
     private $session;
+    private $contextService;
     private $userMailer;
     private $tokenGenerator;
+    private $request;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, UserCheckerInterface $userChecker, SecurityContextInterface $securityContext, SessionInterface $session, UserMailer $userMailer, TokenGenerator $tokenGenerator)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, UserCheckerInterface $userChecker, SecurityContextInterface $securityContext, SessionInterface $session, ContextService $contextService, UserMailer $userMailer, TokenGenerator $tokenGenerator)
     {
         $this->entityManager   = $entityManager;
         $this->encoderFactory  = $encoderFactory;
         $this->userChecker     = $userChecker;
         $this->securityContext = $securityContext;
         $this->session         = $session;
+        $this->contextService  = $contextService;
         $this->userMailer      = $userMailer;
         $this->tokenGenerator  = $tokenGenerator;
+    }
+
+    public function setRequest(Request $request = null)
+    {
+        $this->request = $request;
     }
 
     public function createUser()
@@ -53,9 +63,20 @@ class UserManager
 
     public function updateUser(User $user)
     {
+        $this->applyLocale($user);
         $this->updatePassword($user);
+        $this->refreshUser($user);
         $this->entityManager->persist($user);
         $this->entityManager->flush($user);
+    }
+
+    public function refreshUser(User $user)
+    {
+        $context = $this->entityManager->getRepository('BigfootContextBundle:Context')->findOneByEntityIdEntityClass($user->getId(), 'Bigfoot\Bundle\UserBundle\Entity\User');
+
+        if ($context) {
+            $this->session->set('bigfoot/context/allowed_contexts', $context->getContextValues());
+        }
     }
 
     public function updatePassword(User $user)
@@ -67,15 +88,22 @@ class UserManager
         }
     }
 
+    public function applyLocale($user)
+    {
+        if ($user && $user instanceof User && $user->getLocale()) {
+            $this->request->getSession()->set('_locale', $user->getLocale());
+        }
+    }
+
     public function generateToken(User $user)
     {
-        $token = $this->tokenGenerator->generateToken();
+        $token  = $this->tokenGenerator->generateToken();
         $status = true;
 
         try {
             $this->userMailer->sendForgotPasswordMail($user, $token);
         } catch (Exception $e) {
-            $status   = false;
+            $status  = false;
             $message = "Couldn't send email, please contact an admin.";
         }
 

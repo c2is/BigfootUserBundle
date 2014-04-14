@@ -1,6 +1,6 @@
 <?php
 
-namespace Bigfoot\Bundle\UserBundle\Listener;
+namespace Bigfoot\Bundle\UserBundle\Subscriber;
 
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -14,14 +14,14 @@ use Bigfoot\Bundle\UserBundle\Manager\UserManager;
 use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 
 /**
- * User Listener
+ * User Subscriber
  */
-class UserListener implements EventSubscriberInterface
+class UserSubscriber implements EventSubscriberInterface
 {
     private $userManager;
 
     /**
-     * Construct UserListener
+     * Construct UserSubscriber
      */
     public function __construct(UserManager $userManager)
     {
@@ -38,6 +38,9 @@ class UserListener implements EventSubscriberInterface
         return array(
             SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
             UserEvent::RESET_PASSWORD         => 'onResetPassword',
+            UserEvent::UPDATE_PROFILE         => 'onUpdateProfile',
+            UserEvent::UPDATE_PASSWORD        => 'onUpdatePassword',
+            UserEvent::REFRESH_USER           => 'onRefreshUser',
         );
     }
 
@@ -63,5 +66,26 @@ class UserListener implements EventSubscriberInterface
 
         $this->userManager->updateUser($user);
         $this->userManager->loginUser('back_office', $user);
+    }
+
+    /**
+     * Executed after profile update
+     */
+    public function onUpdateProfile(GenericEvent $event)
+    {
+        $user = $event->getSubject();
+
+        $this->userManager->applyLocale($user);
+        $this->userManager->updatePassword($user);
+    }
+
+    /**
+     * Executed after flush
+     */
+    public function onRefreshUser(GenericEvent $event)
+    {
+        $user = $event->getSubject();
+
+        $this->userManager->refreshUser($user);
     }
 }
