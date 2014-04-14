@@ -3,33 +3,43 @@
 namespace Bigfoot\Bundle\UserBundle\Listener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Gedmo\Translatable\TranslatableListener;
 
 class KernelListener
 {
-    protected $container;
+    protected $securityContext;
+    protected $translationListener;
 
-    public function __construct(Container $container)
+    public function __construct(SecurityContextInterface $securityContext, TranslatableListener $translationListener)
     {
-        $this->container = $container;
+        $this->securityContext     = $securityContext;
+        $this->translationListener = $translationListener;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $locale = $this->container->getParameter('locale');
-
-        if ($requestLocale = $event->getRequest()->get('_locale')) {
-            $locale = $requestLocale;
-        } elseif ($token = $this->container->get('security.context')->getToken() and $user = $token->getUser() and $user instanceof UserInterface) {
-            $locale = $user->getLocale();
+        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
+            return;
         }
 
-        $event->getRequest()->setLocale($locale);
+        $request = $event->getRequest();
+        $token   = $this->securityContext->getToken();
+
+        if ($locale = $request->getSession()->get('_locale', false)) {
+            $request->setLocale($locale);
+        } elseif (!$token) {
+            $request->setLocale('en');
+        } else {
+            $request->setLocale($request->getPreferredLanguage());
+        }
     }
 
     public function onLateKernelRequest(GetResponseEvent $event)
     {
-        $this->container->get('stof_doctrine_extensions.listener.translatable')->setTranslatableLocale($event->getRequest()->getLocale());
+        $this->translationListener->setTranslatableLocale($event->getRequest()->getLocale());
     }
 }

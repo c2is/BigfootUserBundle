@@ -7,8 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 use Bigfoot\Bundle\CoreBundle\Controller\CrudController;
+use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 
 /**
  * User controller.
@@ -97,6 +99,14 @@ class UserController extends CrudController
      */
     protected function prePersist($user, $action)
     {
-        $this->getUserManager()->updatePassword($user);
+        $this->getEventDispatcher()->dispatch(UserEvent::UPDATE_PROFILE, new GenericEvent($user));
+    }
+
+    /**
+     * PostFlush User entity.
+     */
+    protected function postFlush($user, $action)
+    {
+        $this->getEventDispatcher()->dispatch(UserEvent::REFRESH_USER, new GenericEvent($user));
     }
 }
