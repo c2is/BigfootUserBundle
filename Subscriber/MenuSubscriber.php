@@ -50,7 +50,7 @@ class MenuSubscriber implements EventSubscriberInterface
             $userMenu = $root->addChild(
                 'user',
                 array(
-                    'label'          => 'Users',
+                    'label'          => 'bigfoot.sidebar_menu.user.title',
                     'url'            => '#',
                     'linkAttributes' => array(
                         'class' => 'dropdown-toggle',
@@ -68,12 +68,12 @@ class MenuSubscriber implements EventSubscriberInterface
             $userMenu->addChild(
                 'user',
                 array(
-                    'label'  => 'User',
-                    'route'  => 'admin_user',
+                    'label'  => 'bigfoot.sidebar_menu.user.level_1.user',
+                    'route'  => 'bigfoot_user',
                     'extras' => array(
                         'routes' => array(
-                            'admin_user_new',
-                            'admin_user_edit'
+                            'bigfoot_user_new',
+                            'bigfoot_user_edit'
                         )
                     ),
                     'linkAttributes' => array(
@@ -85,12 +85,12 @@ class MenuSubscriber implements EventSubscriberInterface
             $userMenu->addChild(
                 'role',
                 array(
-                    'label'  => 'Role',
-                    'route'  => 'admin_role',
+                    'label'  => 'bigfoot.sidebar_menu.user.level_1.role',
+                    'route'  => 'bigfoot_role',
                     'extras' => array(
                         'routes' => array(
-                            'admin_role_new',
-                            'admin_role_edit'
+                            'bigfoot_role_new',
+                            'bigfoot_role_edit'
                         )
                     ),
                     'linkAttributes' => array(

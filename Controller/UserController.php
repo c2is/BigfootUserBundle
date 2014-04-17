@@ -25,7 +25,7 @@ class UserController extends CrudController
      */
     protected function getName()
     {
-        return 'admin_user';
+        return 'bigfoot_user';
     }
 
     /**
@@ -46,7 +46,7 @@ class UserController extends CrudController
 
     protected function getFormType()
     {
-        return 'admin_user';
+        return 'bigfoot_user';
     }
 
     public function getEntityLabel()
@@ -57,7 +57,7 @@ class UserController extends CrudController
     /**
      * Lists User entities.
      *
-     * @Route("/", name="admin_user")
+     * @Route("/", name="bigfoot_user")
      */
     public function indexAction()
     {
@@ -67,7 +67,7 @@ class UserController extends CrudController
     /**
      * New User entity.
      *
-     * @Route("/new", name="admin_user_new")
+     * @Route("/new", name="bigfoot_user_new")
      */
     public function newAction(Request $request)
     {
@@ -77,7 +77,7 @@ class UserController extends CrudController
     /**
      * Edit User entity.
      *
-     * @Route("/edit/{id}", name="admin_user_edit")
+     * @Route("/edit/{id}", name="bigfoot_user_edit")
      */
     public function editAction(Request $request, $id)
     {
@@ -87,7 +87,7 @@ class UserController extends CrudController
     /**
      * Delete User entity.
      *
-     * @Route("/delete/{id}", name="admin_user_delete")
+     * @Route("/delete/{id}", name="bigfoot_user_delete")
      */
     public function deleteAction(Request $request, $id)
     {

@@ -23,7 +23,7 @@ class RoleController extends CrudController
      */
     protected function getName()
     {
-        return 'admin_role';
+        return 'bigfoot_role';
     }
 
     /**
@@ -49,13 +49,13 @@ class RoleController extends CrudController
 
     protected function getFormType()
     {
-        return 'admin_role';
+        return 'bigfoot_role';
     }
 
     /**
      * List Role entities.
      *
-     * @Route("/", name="admin_role")
+     * @Route("/", name="bigfoot_role")
      */
     public function indexAction()
     {
@@ -64,7 +64,7 @@ class RoleController extends CrudController
     /**
      * New Role entity.
      *
-     * @Route("/new", name="admin_role_new")
+     * @Route("/new", name="bigfoot_role_new")
      */
     public function newAction(Request $request)
     {
@@ -74,7 +74,7 @@ class RoleController extends CrudController
     /**
      * Edit Role entity.
      *
-     * @Route("/edit/{id}", name="admin_role_edit")
+     * @Route("/edit/{id}", name="bigfoot_role_edit")
      */
     public function editAction(Request $request, $id)
     {
@@ -84,7 +84,7 @@ class RoleController extends CrudController
     /**
      * Delete Role entity.
      *
-     * @Route("/delete/{id}", name="admin_role_delete")
+     * @Route("/delete/{id}", name="bigfoot_role_delete")
      */
     public function deleteAction(Request $request, $id)
     {

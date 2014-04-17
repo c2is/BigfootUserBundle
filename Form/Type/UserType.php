@@ -70,6 +70,6 @@ class UserType extends AbstractType
 
     public function getName()
     {
-        return 'admin_user';
+        return 'bigfoot_user';
     }
 }

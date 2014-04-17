@@ -28,6 +28,6 @@ class RoleType extends AbstractType
 
     public function getName()
     {
-        return 'admin_role';
+        return 'bigfoot_role';
     }
 }

@@ -25,7 +25,7 @@ class ForgotPasswordType extends AbstractType
                 'email',
                 'email',
                 array(
-                    'invalid_message' => 'Invalid email',
+                    'invalid_message' => 'form.bigfoot_forgot_password.email.invalid',
                     'required'        => true,
                 )
             );
@@ -47,6 +47,6 @@ class ForgotPasswordType extends AbstractType
 
     public function getName()
     {
-        return 'admin_forgot_password';
+        return 'bigfoot_forgot_password';
     }
 }

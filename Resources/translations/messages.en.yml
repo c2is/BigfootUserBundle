@@ -1,0 +1,67 @@
+bigfoot:
+    sidebar_menu:
+        user:
+            title: User
+            level_1:
+                user: User
+                role: Role
+
+form:
+    bigfoot_login:
+        back_link:   Back to login
+        username:    Email
+        password:    Password
+        remember_me: Remember me
+        submit:      Login
+        exception:
+            disabled:         Your account isn't activated yet. Please check your inbox.
+            locked:           You have no longer access to this application.
+            bad_credentials:  Incorrect informations.
+    bigfoot_forgot_password:
+        title:     Retrieve Password
+        back_link: I forgot my password
+        help:      Enter your email and to receive instructions
+        submit:    Send
+        success:   Email sent check your inbox
+        fail:      Couldn't send email. Please contact an admin.
+        children:
+            email :
+                label: Email
+                error:
+                    non_existing: This email doesn't exist
+                    already_sent: Request already sent, check your emails
+    bigfoot_reset_password:
+        title:   Reset your password
+        submit:  Reset
+        success: Your password has been reset successfully!
+        children:
+            password:
+                children:
+                    first:
+                        label: Password
+                    second:
+                        label: Repeat password
+    bigfoot_user:
+        children:
+            username:
+                label: Username
+            email:
+                label: Email
+            fullName:
+                label: Full name
+            locale:
+                label: Language
+            formRoles:
+                label: Roles
+            plainPassword:
+                children:
+                    first:
+                        label: Password
+                    second:
+                        label: Repeat password
+    bigfoot_role:
+        children:
+            name:
+                label: Name
+            label:
+                label: Label

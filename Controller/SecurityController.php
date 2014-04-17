@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -20,44 +21,44 @@ use Bigfoot\Bundle\UserBundle\Event\UserEvent;
  * BigfootUser controller.
  *
  * @Cache(maxage="0", smaxage="0", public="false")
- * @Route("/")
  */
 class SecurityController extends BaseController
 {
     /**
-     * @Route("/login", name="admin_login")
+     * @Route("/login", name="bigfoot_login")
      */
     public function loginAction(Request $request)
     {
         $session = $request->getSession();
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(
-                SecurityContext::AUTHENTICATION_ERROR
-            );
+            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
             $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         }
 
+        $error = ($error instanceof BadCredentialsException) ? $this->getTranslator()->trans('form.bigfoot_login.exception.bad_credentials') : '';
+        $form  = $this->createForm('bigfoot_login', array('username' => $session->get(SecurityContext::LAST_USERNAME)));
+
         return $this->render(
             $this->getThemeBundle().':user:login.html.twig',
             array(
-                'last_username' => $session->get(SecurityContext::LAST_USERNAME),
-                'error'         => $error,
+                'form'  => $form->createView(),
+                'error' => $error
             )
         );
     }
 
     /**
-     * @Route("/login_check", name="admin_login_check")
+     * @Route("/login_check", name="bigfoot_login_check")
      */
     public function loginCheckAction() {
         throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
     }
 
     /**
-     * @Route("/logout", name="admin_logout")
+     * @Route("/logout", name="bigfoot_logout")
      */
     public function logoutAction() {
         throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
@@ -66,11 +67,11 @@ class SecurityController extends BaseController
     /**
      * Forgot password
      *
-     * @Route("/forgot-password", name="admin_forgot_password")
+     * @Route("/forgot-password", name="bigfoot_forgot_password")
      */
     public function forgotPasswordAction(Request $request)
     {
-        $form = $this->createForm('admin_forgot_password', new ForgotPasswordModel());
+        $form = $this->createForm('bigfoot_forgot_password', new ForgotPasswordModel());
 
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
@@ -79,7 +80,7 @@ class SecurityController extends BaseController
                 $user = $form->get('email')->getData();
 
                 if ($user->isPasswordRequestNonExpired($this->container->getParameter('bigfoot_user.resetting.token_ttl'))) {
-                    return $this->renderAjax(false, 'Request already sent, check your emails.');
+                    return $this->renderAjax(false, $this->getTranslator()->trans("form.bigfoot_forgot_password.children.email.error.already_sent"));
                 }
 
                 $token = $this->getUserManager()->generateToken($user);
@@ -91,7 +92,7 @@ class SecurityController extends BaseController
                 }
             } else {
                 if ($request->isXmlHttpRequest()) {
-                    return $this->renderAjax(false, 'Invalid email.');
+                    return $this->renderAjax(false, $this->getTranslator()->trans("form.bigfoot_forgot_password.children.email.error.non_existing"));
                 }
             }
         }
@@ -107,7 +108,7 @@ class SecurityController extends BaseController
     /**
      * Reset password
      *
-     * @Route("/reset-password/{confirmationToken}", name="admin_reset_password")
+     * @Route("/reset-password/{confirmationToken}", name="bigfoot_reset_password")
      */
     public function resetPasswordAction(Request $request, $confirmationToken)
     {
@@ -115,10 +116,10 @@ class SecurityController extends BaseController
         $tokenTtl = $this->container->getParameter('bigfoot_user.resetting.token_ttl');
 
         if (!$user || !$user->isPasswordRequestNonExpired($tokenTtl)) {
-            return $this->redirect($this->generateUrl('admin_login'));
+            return $this->redirect($this->generateUrl('bigfoot_login'));
         }
 
-        $form = $this->createForm('admin_reset_password', new ResetPasswordModel());
+        $form = $this->createForm('bigfoot_reset_password', new ResetPasswordModel());
 
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
@@ -130,9 +131,9 @@ class SecurityController extends BaseController
 
                 $this->getEventDispatcher()->dispatch(UserEvent::RESET_PASSWORD, new GenericEvent($user));
 
-                $this->addFlash('success', 'Your password has been reset successfully!');
+                $this->addFlash('success', $this->getTranslator()->trans("form.bigfoot_reset_password.success"));
 
-                return $this->redirect($this->generateUrl('admin_home'));
+                return $this->redirect($this->generateUrl('bigfoot_home'));
             }
         }
 

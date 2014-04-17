@@ -1,0 +1,4 @@
+form:
+    bigfoot_forgot_password:
+        email:
+            invalid: This email doesn't exist

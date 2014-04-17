@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Translation\Translator;
 use Doctrine\ORM\EntityManager;
 
 use Bigfoot\Bundle\UserBundle\Entity\User;
@@ -25,18 +26,20 @@ class UserManager
     private $userChecker;
     private $securityContext;
     private $session;
+    private $translator;
     private $context;
     private $userMailer;
     private $tokenGenerator;
     private $request;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, UserCheckerInterface $userChecker, SecurityContextInterface $securityContext, SessionInterface $session, Context $context, UserMailer $userMailer, TokenGenerator $tokenGenerator)
+    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, UserCheckerInterface $userChecker, SecurityContextInterface $securityContext, SessionInterface $session, Translator $translator, Context $context, UserMailer $userMailer, TokenGenerator $tokenGenerator)
     {
         $this->entityManager   = $entityManager;
         $this->encoderFactory  = $encoderFactory;
         $this->userChecker     = $userChecker;
         $this->securityContext = $securityContext;
         $this->session         = $session;
+        $this->translator      = $translator;
         $this->context         = $context;
         $this->userMailer      = $userMailer;
         $this->tokenGenerator  = $tokenGenerator;
@@ -104,11 +107,11 @@ class UserManager
             $this->userMailer->sendForgotPasswordMail($user, $token);
         } catch (Exception $e) {
             $status  = false;
-            $message = "Couldn't send email, please contact an admin.";
+            $message = $this->translator->trans("form.bigfoot_forgot_password.fail");
         }
 
         if ($status == true) {
-            $message = "Email sent check your inbox.";
+            $message = $this->translator->trans("form.bigfoot_forgot_password.success");
 
             $user->setConfirmationToken($token);
             $user->setPasswordRequestedAt(new \DateTime());

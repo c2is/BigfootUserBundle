@@ -1,0 +1,7 @@
+form:
+    bigfoot_forgot_password:
+        email:
+            invalid: This email doesn't exist
+    bigfoot_reset_password:
+        plainPassword:
+            invalid: Passwords are not identical

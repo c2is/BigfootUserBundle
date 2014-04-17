@@ -1,0 +1,52 @@
+bigfoot:
+    sidebar_menu:
+        user:
+            title: Utilisateur
+            level_1:
+                user: Utilisateur
+                role: Role
+
+form:
+    bigfoot_login:
+        back_link:   Retour à la connexion
+        username:    Adresse email
+        password:    Mot de passe
+        remember_me: Mémoriser le mot de passe
+        submit:      Connexion
+        exception:
+            disabled:         Votre compte n'est pas encore activé. Veuillez regarder dans votre boite de messagerie électronique.
+            locked:           Vous n'avez plus accès à l'application.
+            bad_credentials:  Vos informations sont erronées. Veuillez les vérifier.
+    bigfoot_forgot_password:
+        title:     Retrouver son mot de passe
+        back_link: J'ai oublié mon mot de passe
+        help:      Entrez votre adresse email pour récuperer recevoir les instructions
+        submit: Envoyer
+        children:
+            email :
+                label: Adresse email
+    bigfoot_reset_password:
+    bigfoot_user:
+        children:
+            username:
+                label: Nom d'utilisateur
+            email:
+                label: Adresse email
+            fullName:
+                label: Nom complet
+            locale:
+                label: Langue
+            formRoles:
+                label: Liste des groupes d'utilisateurs
+            plainPassword:
+                children:
+                    first:
+                        label: Mot de passe
+                    second:
+                        label: Répéter mot de passe
+    bigfoot_role:
+        children:
+            name:
+                label: Nom
+            label:
+                label: Libellé

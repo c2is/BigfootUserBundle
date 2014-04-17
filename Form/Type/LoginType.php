@@ -5,20 +5,22 @@ namespace Bigfoot\Bundle\UserBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityManager;
 
-class ResetPasswordType extends AbstractType
+/**
+ * LoginType class
+ */
+class LoginType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('username', 'text')
+            ->add('password', 'password')
             ->add(
-                'plainPassword',
-                'repeated',
+                'remember_me',
+                'checkbox',
                 array(
-                    'type'            => 'password',
-                    'invalid_message' => 'form.bigfoot_reset_password.plainPassword.invalid',
-                    'required'        => true,
+                    'required' => false
                 )
             );
     }
@@ -27,13 +29,13 @@ class ResetPasswordType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Bigfoot\Bundle\UserBundle\Form\Model\ResetPasswordModel',
+                'intention' => 'authentication'
             )
         );
     }
 
     public function getName()
     {
-        return 'bigfoot_reset_password';
+        return 'bigfoot_login';
     }
 }
