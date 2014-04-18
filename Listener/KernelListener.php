@@ -2,24 +2,33 @@
 
 namespace Bigfoot\Bundle\UserBundle\Listener;
 
+use Bigfoot\Bundle\UserBundle\Model\User;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Gedmo\Translatable\TranslatableListener;
 
+/**
+ * Class KernelListener
+ * @package Bigfoot\Bundle\UserBundle\Listener
+ */
 class KernelListener
 {
+    /** @var \Symfony\Component\Security\Core\SecurityContextInterface */
     protected $securityContext;
-    protected $translationListener;
 
-    public function __construct(SecurityContextInterface $securityContext, TranslatableListener $translationListener)
+    /**
+     * @param SecurityContextInterface $securityContext
+     */
+    public function __construct(SecurityContextInterface $securityContext)
     {
-        $this->securityContext     = $securityContext;
-        $this->translationListener = $translationListener;
+        $this->securityContext = $securityContext;
     }
 
+    /**
+     * @param GetResponseEvent $event
+     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
@@ -29,17 +38,8 @@ class KernelListener
         $request = $event->getRequest();
         $token   = $this->securityContext->getToken();
 
-        if ($locale = $request->getSession()->get('_locale', false)) {
-            $request->setLocale($locale);
-        } elseif (!$token) {
-            $request->setLocale('en');
-        } else {
-            $request->setLocale($request->getPreferredLanguage());
+        if ($token and $user = $token->getUser() and $user instanceof User) {
+            $request->setLocale($user->getLocale());
         }
-    }
-
-    public function onLateKernelRequest(GetResponseEvent $event)
-    {
-        $this->translationListener->setTranslatableLocale($event->getRequest()->getLocale());
     }
 }
