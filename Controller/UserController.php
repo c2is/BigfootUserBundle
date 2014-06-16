@@ -39,8 +39,12 @@ class UserController extends CrudController
     protected function getFields()
     {
         return array(
-            'id'       => 'ID',
-            'username' => 'Username'
+            'id'    => array(
+                'label'    => 'ID',
+            ),
+            'label' => array(
+                'username' => 'Username',
+            ),
         );
     }
 

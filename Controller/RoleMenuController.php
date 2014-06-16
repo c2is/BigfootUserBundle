@@ -47,8 +47,12 @@ class RoleMenuController extends CrudController
     public function getFields()
     {
         return array(
-            'name'  => 'Name',
-            'label' => 'Label',
+            'name'    => array(
+                'label' => 'Name',
+            ),
+            'label' => array(
+                'label' => 'Label',
+            ),
         );
     }
 

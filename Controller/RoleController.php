@@ -42,8 +42,12 @@ class RoleController extends CrudController
     protected function getFields()
     {
         return array(
-            'id'    => 'ID',
-            'label' => 'Label'
+            'id'    => array(
+                'label' => 'ID',
+            ),
+            'label' => array(
+                'label' => 'Label',
+            ),
         );
     }
 
