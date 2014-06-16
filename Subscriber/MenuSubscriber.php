@@ -43,12 +43,22 @@ class MenuSubscriber implements EventSubscriberInterface
      */
     public function onGenerateMain(GenericEvent $event)
     {
-        $menu = $event->getSubject();
-        $root = $menu->getRoot();
+        $builder = $event->getSubject();
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            $userMenu = $root->addChild(
-                'user',
+        $builder
+            ->addChildFor(
+                'settings',
+                'settings_role_menu',
+                array(
+                    'label'  => 'Role Menu',
+                    'route'  => 'admin_role_menu',
+                    'linkAttributes' => array(
+                        'icon' => 'wrench',
+                    )
+                )
+            )
+            ->addChild(
+                'users',
                 array(
                     'label'          => 'Users',
                     'url'            => '#',
@@ -56,17 +66,16 @@ class MenuSubscriber implements EventSubscriberInterface
                         'class' => 'dropdown-toggle',
                         'icon'  => 'group',
                     )
-                )
-            );
-
-            $userMenu->setChildrenAttributes(
+                ),
                 array(
-                    'class' => 'submenu',
+                    'children-attributes' => array(
+                        'class' => 'submenu'
+                    )
                 )
-            );
-
-            $userMenu->addChild(
-                'user',
+            )
+            ->addChildFor(
+                'users',
+                'users_user',
                 array(
                     'label'  => 'User',
                     'route'  => 'admin_user',
@@ -80,10 +89,10 @@ class MenuSubscriber implements EventSubscriberInterface
                         'icon' => 'user',
                     )
                 )
-            );
-
-            $userMenu->addChild(
-                'role',
+            )
+            ->addChildFor(
+                'users',
+                'users_role',
                 array(
                     'label'  => 'Role',
                     'route'  => 'admin_role',
@@ -98,6 +107,5 @@ class MenuSubscriber implements EventSubscriberInterface
                     )
                 )
             );
-        }
     }
 }
