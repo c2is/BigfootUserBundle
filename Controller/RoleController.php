@@ -51,6 +51,20 @@ class RoleController extends CrudController
         );
     }
 
+    protected function getFilters()
+    {
+        return array(
+            array(
+                'placeholder' => 'Label',
+                'name'        => 'label',
+                'type'        => 'referer',
+                'options' => array(
+                    'property' => 'label'
+                )
+            )
+        );
+    }
+
     protected function getFormType()
     {
         return 'admin_role';
