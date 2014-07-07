@@ -121,10 +121,22 @@ class UserController extends CrudController
     }
 
     /**
-     * PostFlush User entity.
+     * Post flush entity
+     *
+     * @param object $user user
      */
     protected function postFlush($user, $action)
     {
+        $request = $this->container->get('request');
+
+        if ($this->getSettingsManager()->getSetting('send_email', false)) {
+            $datas = $request->get($this->getFormType());
+
+            if (isset($datas['send_email'])) {
+                $this->getUserManager()->createPassword($user);
+            }
+        }
+
         $this->getEventDispatcher()->dispatch(UserEvent::REFRESH_USER, new GenericEvent($user));
     }
 }
