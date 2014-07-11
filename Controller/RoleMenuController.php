@@ -38,7 +38,6 @@ class RoleMenuController extends BaseController
      *
      * @Route("/", name="admin_role_menu")
      * @Method({"GET", "POST"})
-     * @Template()
      */
     public function indexAction(Request $request)
     {
@@ -56,9 +55,11 @@ class RoleMenuController extends BaseController
             }
         }
 
-        return array(
+        return $this->render(
+            $this->getThemeBundle().':RoleMenu:index.html.twig',
+            array(
             'items' => $items,
             'form'  => $form->createview()
-        );
+        ));
     }
 }
