@@ -123,6 +123,34 @@ class UserManager
         );
     }
 
+    public function createPassword(User $user)
+    {
+        $token  = $this->tokenGenerator->generateToken();
+        $status = true;
+
+        try {
+            $this->userMailer->sendCreatePasswordMail($user, $token);
+        } catch (Exception $e) {
+            $status  = false;
+            $message = "Couldn't send email, please contact an admin.";
+        }
+
+        if ($status == true) {
+            $message = "Email sent check your inbox.";
+
+            $user->setConfirmationToken($token);
+            $user->setPasswordRequestedAt(new \DateTime());
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+        }
+
+        return array(
+            'status'  => $status,
+            'message' => $message,
+        );
+    }
+
     protected function getEncoder(User $user)
     {
         return $this->encoderFactory->getEncoder($user);

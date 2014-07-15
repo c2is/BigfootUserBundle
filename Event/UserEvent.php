@@ -11,4 +11,5 @@ final class UserEvent
     const UPDATE_PROFILE  = 'bigfoot_user.event.user.update_profile';
     const UPDATE_PASSWORD = 'bigfoot_user.event.user.update_password';
     const REFRESH_USER    = 'bigfoot_user.event.user.refresh_user';
+    const CREATE_PASSWORD = 'bigfoot_user.event.user.create_password';
 }

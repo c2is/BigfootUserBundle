@@ -7,16 +7,42 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
+use Bigfoot\Bundle\CoreBundle\Manager\SettingsManager;
+
+/**
+ * User Type
+ *
+ * @package BigfootUserBundle
+ */
 class UserType extends AbstractType
 {
+    /**
+     * @var SecurityContextInterface
+     */
     private $securityContext;
 
+    /**
+     * @var array
+     */
     private $languages;
 
-    public function __construct(SecurityContextInterface $securityContext, array $languages)
+    /**
+     * @var SettingsManager
+     */
+    private $settings;
+
+    /**
+     * Constructor
+     *
+     * @param SecurityContextInterface $securityContext
+     * @param array                    $languages
+     * @param SettingsManager          $settings
+     */
+    public function __construct(SecurityContextInterface $securityContext, array $languages, SettingsManager $settings)
     {
-        $this->securityContext  = $securityContext;
-        $this->languages        = $languages;
+        $this->securityContext = $securityContext;
+        $this->languages       = $languages;
+        $this->settings        = $settings;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -57,6 +83,19 @@ class UserType extends AbstractType
                     'required' => false,
                 )
             );
+
+        if ($this->settings->getSetting('user_send_email')) {
+            $builder
+                ->add(
+                    'send_email',
+                    'checkbox',
+                    array(
+                        'label'    => 'bigfoot_user.settings.label.send_email',
+                        'required' => false,
+                        'mapped'   => false
+                    )
+                );
+        }
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

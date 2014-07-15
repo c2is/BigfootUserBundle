@@ -22,6 +22,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    # Settings Subscriber
+    bigfoot_user.subscriber.settings:
+        class: Bigfoot\Bundle\UserBundle\Subscriber\SettingsSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
     # User Manager
     bigfoot_user.manager.user:
         class: Bigfoot\Bundle\UserBundle\Manager\UserManager
@@ -40,6 +46,8 @@ services:
     # User Mailer
     bigfoot_user.mailer.user:
         class: Bigfoot\Bundle\UserBundle\Mailer\UserMailer
+        arguments:
+            - @event_dispatcher
         parent: bigfoot_core.mailer.abstract
 
     # User Subscriber
@@ -56,6 +64,7 @@ services:
         arguments:
             - @security.context
             - %bigfoot_core.languages.front%
+            - @bigfoot_core.manager.settings
         tags:
             - { name: form.type, alias: admin_user }
 

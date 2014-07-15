@@ -22,7 +22,7 @@
                                 {% if roleMenu.level.vars.value != 0 %}
                                     <span class="text-muted">{% for i in 1..roleMenu.level.vars.value %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}</span>
                                 {% endif %}
-                                {{ roleMenu.label.vars.value }}
+                                {{ roleMenu.label.vars.value|trans }}
                                 <span class="text-muted"><i>({{ roleMenu.slug.vars.value }})</i></span>
                             </td>
                             <td>
