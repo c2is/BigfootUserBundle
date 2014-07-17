@@ -387,7 +387,7 @@ abstract class User implements AdvancedUserInterface, Serializable
 
     public function isEnabled()
     {
-        return true;
+        return $this->enabled;
     }
 
     /**

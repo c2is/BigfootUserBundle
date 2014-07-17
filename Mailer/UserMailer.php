@@ -13,13 +13,28 @@ use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 
 class UserMailer extends AbstractMailer
 {
+    /**
+     * @var EventDispatcher
+     */
     private $eventDispatcher;
 
+    /**
+     * Constructor
+     *
+     * @param EventDispatcher $eventDispatcher
+     */
     public function __construct(EventDispatcher $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * sendForgotPasswordMail
+     *
+     * @param  User   $user
+     * @param  string $token
+     * @return null
+     */
     public function sendForgotPasswordMail(User $user, $token)
     {
         $body = $this->getTemplating()->render(
@@ -41,7 +56,6 @@ class UserMailer extends AbstractMailer
      *
      * @param  User   $user
      * @param  string $token
-     *
      * @return boolean
      */
     public function sendCreatePasswordMail(User $user, $token)
@@ -53,7 +67,7 @@ class UserMailer extends AbstractMailer
             )
         );
 
-        $return = $this->eventDispatcher->dispatch(UserEvent::CREATE_PASSWORD, $event);
+        $this->eventDispatcher->dispatch(UserEvent::CREATE_PASSWORD, $event);
 
         if (!$event->isPropagationStopped()) {
             $body = $this->getTemplating()->render(
