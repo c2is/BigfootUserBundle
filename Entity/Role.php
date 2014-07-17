@@ -50,6 +50,11 @@ class Role implements RoleInterface, Serializable
      */
     private $locale;
 
+    /**
+     * To string
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->label;
@@ -157,10 +162,12 @@ class Role implements RoleInterface, Serializable
      */
     public function serialize()
     {
-        return serialize(array(
-            $this->id,
-            $this->name,
-        ));
+        return serialize(
+            array(
+                $this->id,
+                $this->name,
+            )
+        );
     }
 
     /**

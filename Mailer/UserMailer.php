@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 use Bigfoot\Bundle\CoreBundle\Mailer\AbstractMailer;
-use Bigfoot\Bundle\UserBundle\Entity\User;
+use Bigfoot\Bundle\UserBundle\Model\User;
 use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 
 class UserMailer extends AbstractMailer
