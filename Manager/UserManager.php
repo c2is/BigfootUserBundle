@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 
+use Bigfoot\Bundle\UserBundle\Model\User as ModelUser;
 use Bigfoot\Bundle\UserBundle\Entity\User;
 use Bigfoot\Bundle\UserBundle\Mailer\UserMailer;
 use Bigfoot\Bundle\CoreBundle\Generator\TokenGenerator;
@@ -52,7 +53,7 @@ class UserManager
         return new User();
     }
 
-    public function loginUser($firewallName, User $user)
+    public function loginUser($firewallName, ModelUser $user)
     {
         $this->userChecker->checkPostAuth($user);
 
@@ -61,7 +62,7 @@ class UserManager
         $this->securityContext->setToken($token);
     }
 
-    public function updateUser(User $user)
+    public function updateUser(ModelUser $user)
     {
         $this->applyLocale($user);
         $this->updatePassword($user);
@@ -70,7 +71,7 @@ class UserManager
         $this->entityManager->flush($user);
     }
 
-    public function refreshUser(User $user)
+    public function refreshUser(ModelUser $user)
     {
         $context = $this->entityManager->getRepository('BigfootContextBundle:Context')->findOneByEntityIdEntityClass($user->getId(), 'Bigfoot\Bundle\UserBundle\Entity\User');
 
@@ -79,7 +80,7 @@ class UserManager
         }
     }
 
-    public function updatePassword(User $user)
+    public function updatePassword(ModelUser $user)
     {
         if (0 !== strlen($password = $user->getPlainPassword())) {
             $encoder = $this->getEncoder($user);
@@ -90,12 +91,12 @@ class UserManager
 
     public function applyLocale($user)
     {
-        if ($user && $user instanceof User && $user->getLocale()) {
+        if ($user && $user instanceof ModelUser && $user->getLocale()) {
             $this->request->getSession()->set('_locale', $user->getLocale());
         }
     }
 
-    public function generateToken(User $user)
+    public function generateToken(ModelUser $user)
     {
         $token  = $this->tokenGenerator->generateToken();
         $status = true;
@@ -123,7 +124,7 @@ class UserManager
         );
     }
 
-    public function createPassword(User $user)
+    public function createPassword(ModelUser $user)
     {
         $token  = $this->tokenGenerator->generateToken();
         $status = true;
@@ -151,12 +152,12 @@ class UserManager
         );
     }
 
-    protected function getEncoder(User $user)
+    protected function getEncoder(ModelUser $user)
     {
         return $this->encoderFactory->getEncoder($user);
     }
 
-    protected function createToken($firewall, User $user)
+    protected function createToken($firewall, ModelUser $user)
     {
         return new UsernamePasswordToken($user, null, $firewall, $user->getRoles());
     }

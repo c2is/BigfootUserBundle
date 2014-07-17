@@ -32,11 +32,19 @@ class User extends BaseUser
     private $fullName;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Bigfoot\Bundle\UserBundle\Entity\Role", inversedBy="users")
+     * @ORM\JoinTable(name="bigfoot_user_role")
+     */
+    protected $roles;
+
+    /**
      * Construct User
      */
     public function __construct()
     {
         parent::__construct();
+
+        $this->roles = new ArrayCollection();
 
         $this->setEnabled(true);
     }
@@ -80,6 +88,49 @@ class User extends BaseUser
     public function getFullname()
     {
         return $this->fullName;
+    }
+
+    /**
+     * Add Role.
+     *
+     * @return BigfootUser
+     */
+    public function addRole(Role $role)
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles->add($role);
+        }
+
+        return $this;
+    }
+
+    public function getRoles()
+    {
+        foreach ($this->roles as $role) {
+            $roles[] = $role->getName();
+        }
+
+        $roles[] = static::ROLE_DEFAULT;
+
+        return array_unique($roles);
+    }
+
+    public function getFormRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * Remove a User Role.
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $roles
+     * @return BigfootUser
+     */
+    public function removeRole($role)
+    {
+        $this->roles->removeElement($role);
+
+        return $this;
     }
 
     /**

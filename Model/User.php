@@ -121,12 +121,6 @@ abstract class User implements AdvancedUserInterface, Serializable
     protected $expiresAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
-     * @ORM\JoinTable(name="bigfoot_user_role")
-     */
-    protected $roles;
-
-    /**
      * @var datetime $created
      *
      * @Gedmo\Timestampable(on="create")
@@ -161,49 +155,6 @@ abstract class User implements AdvancedUserInterface, Serializable
         $this->enabled = false;
         $this->locked  = false;
         $this->expired = false;
-    }
-
-    /**
-     * Add Role.
-     *
-     * @return BigfootUser
-     */
-    public function addRole(Role $role)
-    {
-        if (!$this->roles->contains($role)) {
-            $this->roles->add($role);
-        }
-
-        return $this;
-    }
-
-    public function getRoles()
-    {
-        foreach ($this->roles as $role) {
-            $roles[] = $role->getName();
-        }
-
-        $roles[] = static::ROLE_DEFAULT;
-
-        return array_unique($roles);
-    }
-
-    public function getFormRoles()
-    {
-        return $this->roles;
-    }
-
-    /**
-     * Remove a User Role.
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $roles
-     * @return BigfootUser
-     */
-    public function removeRole($role)
-    {
-        $this->roles->removeElement($role);
-
-        return $this;
     }
 
     /**
@@ -482,13 +433,21 @@ abstract class User implements AdvancedUserInterface, Serializable
         return $this->updatedBy;
     }
 
+    public function getRoles()
+    {
+        return array();
+    }
+
     /**
      * (PHP 5 &gt;= 5.1.0)<br/>
      * String representation of object
      * @link http://php.net/manual/en/serializable.serialize.php
      * @return string the string representation of the object or null
      */
-    public function serialize() {}
+    public function serialize()
+    {
+
+    }
 
     /**
      * (PHP 5 &gt;= 5.1.0)<br/>
@@ -499,7 +458,10 @@ abstract class User implements AdvancedUserInterface, Serializable
      * </p>
      * @return void
      */
-    public function unserialize($serialized) {}
+    public function unserialize($serialized)
+    {
+
+    }
 
     /**
      * Get username
