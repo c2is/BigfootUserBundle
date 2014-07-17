@@ -6,8 +6,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
-use Bigfoot\Bundle\CoreBundle\Manager\SettingsManager;
+use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 
 /**
  * User Type
@@ -27,24 +29,31 @@ class UserType extends AbstractType
     private $languages;
 
     /**
-     * @var SettingsManager
+     * @var EventDispatcher
      */
-    private $settings;
+    private $eventDispatcher;
 
     /**
      * Constructor
      *
      * @param SecurityContextInterface $securityContext
      * @param array                    $languages
-     * @param SettingsManager          $settings
+     * @param EventDispatcher          $eventDispatcher
      */
-    public function __construct(SecurityContextInterface $securityContext, array $languages, SettingsManager $settings)
+    public function __construct(SecurityContextInterface $securityContext, array $languages, EventDispatcher $eventDispatcher)
     {
         $this->securityContext = $securityContext;
         $this->languages       = $languages;
-        $this->settings        = $settings;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * BuildForm
+     *
+     * @param  FormBuilderInterface $builder
+     * @param  array                $options
+     * @return null
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $langs = array_keys($this->languages);
@@ -52,7 +61,15 @@ class UserType extends AbstractType
 
         $builder
             ->add('username')
-            ->add('email')
+            ->add(
+                'email',
+                'text',
+                array(
+                    'attr' => array(
+                        'class' => 'width-100'
+                    )
+                )
+            )
             ->add('fullName')
             ->add(
                 'locale',
@@ -64,6 +81,13 @@ class UserType extends AbstractType
 
         if ($this->securityContext->isGranted('ROLE_ADMIN')) {
             $builder
+                ->add(
+                    'enabled',
+                    'checkbox',
+                    array(
+                        'required' => false
+                    )
+                )
                 ->add(
                     'formRoles',
                     'entity',
@@ -84,20 +108,14 @@ class UserType extends AbstractType
                 )
             );
 
-        if ($this->settings->getSetting('user_send_email')) {
-            $builder
-                ->add(
-                    'send_email',
-                    'checkbox',
-                    array(
-                        'label'    => 'bigfoot_user.settings.label.send_email',
-                        'required' => false,
-                        'mapped'   => false
-                    )
-                );
-        }
+        $this->eventDispatcher->dispatch(UserEvent::CREATE_FORM, new GenericEvent($builder));
     }
 
+    /**
+     * SetDefaultOptions
+     *
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
@@ -107,6 +125,11 @@ class UserType extends AbstractType
         );
     }
 
+    /**
+     * Get name
+     *
+     * @return string
+     */
     public function getName()
     {
         return 'admin_user';

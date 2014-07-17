@@ -64,7 +64,7 @@ services:
         arguments:
             - @security.context
             - %bigfoot_core.languages.front%
-            - @bigfoot_core.manager.settings
+            - @event_dispatcher
         tags:
             - { name: form.type, alias: admin_user }
 
