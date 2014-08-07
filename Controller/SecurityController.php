@@ -52,14 +52,16 @@ class SecurityController extends BaseController
     /**
      * @Route("/login_check", name="admin_login_check")
      */
-    public function loginCheckAction() {
+    public function loginCheckAction()
+    {
         throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
     }
 
     /**
      * @Route("/logout", name="admin_logout")
      */
-    public function logoutAction() {
+    public function logoutAction()
+    {
         throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
     }
 
@@ -79,19 +81,19 @@ class SecurityController extends BaseController
                 $user = $form->get('email')->getData();
 
                 if ($user->isPasswordRequestNonExpired($this->container->getParameter('bigfoot_user.resetting.token_ttl'))) {
-                    return $this->renderAjax(false, 'Request already sent, check your emails.');
+                    return $this->renderAjax(false, $this->getTranslator()->trans('Request already sent, check your emails'));
                 }
 
                 $token = $this->getUserManager()->generateToken($user);
 
                 if ($request->isXmlHttpRequest()) {
-                    return $this->renderAjax($token['status'], $token['message']);
+                    return $this->renderAjax($token['status'], $this->getTranslator()->trans($token['message']));
                 } else {
                     return $this->redirect($this->generateUrl('forgot_password'));
                 }
             } else {
                 if ($request->isXmlHttpRequest()) {
-                    return $this->renderAjax(false, 'Invalid email.');
+                    return $this->renderAjax(false, $this->getTranslator()->trans('Invalid email'));
                 }
             }
         }
@@ -130,7 +132,7 @@ class SecurityController extends BaseController
 
                 $this->getEventDispatcher()->dispatch(UserEvent::RESET_PASSWORD, new GenericEvent($user));
 
-                $this->addFlash('success', 'Your password has been reset successfully!');
+                $this->addFlash('success', 'Your password has been reset successfully');
 
                 return $this->redirect($this->generateUrl('admin_home'));
             }

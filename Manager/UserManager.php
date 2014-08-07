@@ -105,11 +105,11 @@ class UserManager
             $this->userMailer->sendForgotPasswordMail($user, $token);
         } catch (Exception $e) {
             $status  = false;
-            $message = "Couldn't send email, please contact an admin.";
+            $message = "Couldn't send email, please contact an admin";
         }
 
         if ($status == true) {
-            $message = "Email sent check your inbox.";
+            $message = "Email sent check your inbox";
 
             $user->setConfirmationToken($token);
             $user->setPasswordRequestedAt(new \DateTime());
@@ -133,11 +133,11 @@ class UserManager
             $this->userMailer->sendCreatePasswordMail($user, $token);
         } catch (Exception $e) {
             $status  = false;
-            $message = "Couldn't send email, please contact an admin.";
+            $message = "Couldn't send email, please contact an admin";
         }
 
         if ($status == true) {
-            $message = "Email sent check your inbox.";
+            $message = "Email sent check your inbox";
 
             $user->setConfirmationToken($token);
             $user->setPasswordRequestedAt(new \DateTime());
