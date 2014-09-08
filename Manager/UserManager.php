@@ -21,15 +21,15 @@ use Bigfoot\Bundle\ContextBundle\Service\ContextService as Context;
  */
 class UserManager
 {
-    private $entityManager;
-    private $encoderFactory;
-    private $userChecker;
-    private $securityContext;
-    private $session;
-    private $context;
-    private $userMailer;
-    private $tokenGenerator;
-    private $request;
+    protected $entityManager;
+    protected $encoderFactory;
+    protected $userChecker;
+    protected $securityContext;
+    protected $session;
+    protected $context;
+    protected $userMailer;
+    protected $tokenGenerator;
+    protected $request;
 
     public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, UserCheckerInterface $userChecker, SecurityContextInterface $securityContext, SessionInterface $session, Context $context, UserMailer $userMailer, TokenGenerator $tokenGenerator)
     {
