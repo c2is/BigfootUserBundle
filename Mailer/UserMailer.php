@@ -4,7 +4,7 @@ namespace Bigfoot\Bundle\UserBundle\Mailer;
 
 use Doctrine\ORM\EntityManager;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 use Bigfoot\Bundle\CoreBundle\Mailer\AbstractMailer;
@@ -14,16 +14,16 @@ use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 class UserMailer extends AbstractMailer
 {
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
     /**
      * Constructor
      *
-     * @param EventDispatcher $eventDispatcher
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(EventDispatcher $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }
