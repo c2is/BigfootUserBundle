@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 use Bigfoot\Bundle\UserBundle\Event\UserEvent;
@@ -29,7 +29,7 @@ class UserType extends AbstractType
     private $languages;
 
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
@@ -40,7 +40,7 @@ class UserType extends AbstractType
      * @param array                    $languages
      * @param EventDispatcher          $eventDispatcher
      */
-    public function __construct(SecurityContextInterface $securityContext, array $languages, EventDispatcher $eventDispatcher)
+    public function __construct(SecurityContextInterface $securityContext, array $languages, EventDispatcherInterface $eventDispatcher)
     {
         $this->securityContext = $securityContext;
         $this->languages       = $languages;
