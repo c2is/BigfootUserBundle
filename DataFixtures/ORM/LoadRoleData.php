@@ -2,6 +2,7 @@
 
 namespace Bigfoot\Bundle\UserBundle\DataFixtures\ORM;
 
+use Bigfoot\Bundle\UserBundle\Entity\Translation\RoleTranslation;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -31,9 +32,8 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface
 
         $this->setReference('ROLE_USER', $roleUser);
 
-        $repository = $manager->getRepository('Gedmo\Translatable\Entity\Translation');
-        $repository->translate($roleAdmin, 'label', 'fr', 'Administrateur');
-        $repository->translate($roleUser, 'label', 'fr', 'Utilisateur');
+        $roleAdmin->addTranslation(new RoleTranslation('fr', 'label', 'Administrateur'));
+        $roleUser->addTranslation(new RoleTranslation('fr', 'label', 'Utilisateur'));
 
         $manager->persist($roleAdmin);
         $manager->persist($roleUser);

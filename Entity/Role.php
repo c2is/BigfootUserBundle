@@ -2,6 +2,7 @@
 
 namespace Bigfoot\Bundle\UserBundle\Entity;
 
+use Bigfoot\Bundle\UserBundle\Entity\Translation\RoleTranslation;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,6 +12,7 @@ use Serializable;
 /**
  * Role
  *
+ * @Gedmo\TranslationEntity(class="Bigfoot\Bundle\UserBundle\Entity\Translation\RoleTranslation")
  * @ORM\Table(name="bigfoot_role")
  * @ORM\Entity(repositoryClass="Bigfoot\Bundle\UserBundle\Entity\RoleRepository")
  */
@@ -49,6 +51,23 @@ class Role implements RoleInterface, Serializable
      * @Gedmo\Locale
      */
     private $locale;
+
+    /**
+     * @ORM\OneToMany(
+     *   targetEntity="Bigfoot\Bundle\UserBundle\Entity\Translation\RoleTranslation",
+     *   mappedBy="object",
+     *   cascade={"persist", "remove"}
+     * )
+     */
+    private $translations;
+
+    /**
+     * Construct Menu
+     */
+    public function __construct()
+    {
+        $this->translations = new ArrayCollection();
+    }
 
     /**
      * To string
@@ -193,5 +212,24 @@ class Role implements RoleInterface, Serializable
     public function setTranslatableLocale($locale)
     {
         $this->locale = $locale;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @param RoleTranslation $t
+     */
+    public function addTranslation(RoleTranslation $t)
+    {
+        if (!$this->translations->contains($t)) {
+            $this->translations[] = $t;
+            $t->setObject($this);
+        }
     }
 }
