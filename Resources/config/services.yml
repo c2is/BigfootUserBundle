@@ -10,7 +10,7 @@ services:
         class: Bigfoot\Bundle\UserBundle\Listener\KernelListener
         arguments:
             - @security.context
-            - @stof_doctrine_extensions.listener.translatable
+            - @kernel
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
