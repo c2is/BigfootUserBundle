@@ -18,12 +18,17 @@ class KernelListener
     /** @var \Symfony\Component\Security\Core\SecurityContextInterface */
     protected $securityContext;
 
+    /** @var \Symfony\Component\HttpKernel\HttpKernelInterface */
+    protected $kernel;
+
     /**
-     * @param SecurityContextInterface $securityContext
+     * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     * @param \Symfony\Component\HttpKernel\HttpKernelInterface $kernel
      */
-    public function __construct(SecurityContextInterface $securityContext)
+    public function __construct(SecurityContextInterface $securityContext, HttpKernelInterface $kernel)
     {
         $this->securityContext = $securityContext;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -31,11 +36,14 @@ class KernelListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
+        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType() or 'admin' != $this->kernel->getEnvironment()) {
             return;
         }
 
         $request = $event->getRequest();
+
+        if ($request->get)
+
         $token   = $this->securityContext->getToken();
 
         if ($token and $user = $token->getUser() and $user instanceof User) {
