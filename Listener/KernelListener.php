@@ -6,6 +6,7 @@ use Bigfoot\Bundle\UserBundle\Model\User;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Gedmo\Translatable\TranslatableListener;
 
@@ -18,14 +19,14 @@ class KernelListener
     /** @var \Symfony\Component\Security\Core\SecurityContextInterface */
     protected $securityContext;
 
-    /** @var \Symfony\Component\HttpKernel\HttpKernelInterface */
+    /** @var Kernel */
     protected $kernel;
 
     /**
      * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
-     * @param \Symfony\Component\HttpKernel\HttpKernelInterface $kernel
+     * @param Kernel $kernel
      */
-    public function __construct(SecurityContextInterface $securityContext, HttpKernelInterface $kernel)
+    public function __construct(SecurityContextInterface $securityContext, Kernel $kernel)
     {
         $this->securityContext = $securityContext;
         $this->kernel = $kernel;
@@ -36,14 +37,11 @@ class KernelListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType() or 'admin' != $this->kernel->getEnvironment()) {
+        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType() or !in_array($this->kernel->getEnvironment(), array('admin', 'admin_dev'))) {
             return;
         }
 
         $request = $event->getRequest();
-
-        if ($request->get)
-
         $token   = $this->securityContext->getToken();
 
         if ($token and $user = $token->getUser() and $user instanceof User) {
