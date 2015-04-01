@@ -2,6 +2,7 @@
 
 namespace Bigfoot\Bundle\UserBundle\Form\Type;
 
+use Bigfoot\Bundle\ContextBundle\Service\ContextService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -37,13 +38,16 @@ class UserType extends AbstractType
      * Constructor
      *
      * @param SecurityContextInterface $securityContext
-     * @param array                    $languages
-     * @param EventDispatcher          $eventDispatcher
+     * @param ContextService                    $context
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(SecurityContextInterface $securityContext, array $languages, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        SecurityContextInterface $securityContext,
+        ContextService $context,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->securityContext = $securityContext;
-        $this->languages       = $languages;
+        $this->languages       = $context->getValues('language_back');
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -52,11 +56,12 @@ class UserType extends AbstractType
      *
      * @param  FormBuilderInterface $builder
      * @param  array                $options
+     *
      * @return null
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $langs = array_keys($this->languages);
+        $langs       = array_keys($this->languages);
         $langChoices = array_combine($langs, $langs);
 
         $builder
