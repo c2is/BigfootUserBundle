@@ -248,7 +248,7 @@ abstract class User implements AdvancedUserInterface, Serializable
 
     public function getSalt()
     {
-        return null;
+        return $this->salt;
     }
 
     public function eraseCredentials()
