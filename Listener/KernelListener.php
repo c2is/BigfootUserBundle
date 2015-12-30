@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Gedmo\Translatable\TranslatableListener;
 
 /**
@@ -16,19 +16,19 @@ use Gedmo\Translatable\TranslatableListener;
  */
 class KernelListener
 {
-    /** @var \Symfony\Component\Security\Core\SecurityContextInterface */
-    protected $securityContext;
+    /** @var TokenStorage */
+    protected $securityTokenStorage;
 
     /** @var Kernel */
     protected $kernel;
 
     /**
-     * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     * @param TokenStorage $securityContext
      * @param Kernel $kernel
      */
-    public function __construct(SecurityContextInterface $securityContext, Kernel $kernel)
+    public function __construct(TokenStorage $securityContext, Kernel $kernel)
     {
-        $this->securityContext = $securityContext;
+        $this->securityTokenStorage = $securityContext;
         $this->kernel = $kernel;
     }
 
@@ -42,7 +42,7 @@ class KernelListener
         }
 
         $request = $event->getRequest();
-        $token   = $this->securityContext->getToken();
+        $token   = $this->securityTokenStorage->getToken();
 
         if ($token and $user = $token->getUser() and $user instanceof User) {
             $request->setLocale($user->getLocale());

@@ -4,10 +4,10 @@ namespace Bigfoot\Bundle\UserBundle\Manager;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 
 use Bigfoot\Bundle\UserBundle\Model\User as ModelUser;
@@ -24,23 +24,33 @@ class UserManager
     protected $entityManager;
     protected $encoderFactory;
     protected $userChecker;
-    protected $securityContext;
+
+    /** @var TokenStorage */
+    protected $securityTokenStorage;
     protected $session;
     protected $context;
     protected $userMailer;
     protected $tokenGenerator;
     protected $request;
 
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory, UserCheckerInterface $userChecker, SecurityContextInterface $securityContext, SessionInterface $session, Context $context, UserMailer $userMailer, TokenGenerator $tokenGenerator)
-    {
-        $this->entityManager   = $entityManager;
-        $this->encoderFactory  = $encoderFactory;
-        $this->userChecker     = $userChecker;
-        $this->securityContext = $securityContext;
-        $this->session         = $session;
-        $this->context         = $context;
-        $this->userMailer      = $userMailer;
-        $this->tokenGenerator  = $tokenGenerator;
+    public function __construct(
+        EntityManager $entityManager,
+        EncoderFactoryInterface $encoderFactory,
+        UserCheckerInterface $userChecker,
+        TokenStorage $securityTokenStorage,
+        SessionInterface $session,
+        Context $context,
+        UserMailer $userMailer,
+        TokenGenerator $tokenGenerator
+    ) {
+        $this->entityManager        = $entityManager;
+        $this->encoderFactory       = $encoderFactory;
+        $this->userChecker          = $userChecker;
+        $this->securityTokenStorage = $securityTokenStorage;
+        $this->session              = $session;
+        $this->context              = $context;
+        $this->userMailer           = $userMailer;
+        $this->tokenGenerator       = $tokenGenerator;
     }
 
     public function setRequest(Request $request = null)
@@ -59,7 +69,7 @@ class UserManager
 
         $token = $this->createToken($firewallName, $user);
 
-        $this->securityContext->setToken($token);
+        $this->securityTokenStorage->setToken($token);
     }
 
     public function updateUser(ModelUser $user)

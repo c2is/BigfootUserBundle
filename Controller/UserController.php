@@ -76,10 +76,12 @@ class UserController extends CrudController
      * Lists User entities.
      *
      * @Route("/", name="admin_user")
+     * @param Request $request
+     * @return array
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        return $this->doIndex();
+        return $this->doIndex($request);
     }
 
     /**
