@@ -2,12 +2,14 @@
 
 namespace Bigfoot\Bundle\UserBundle\Manager;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 
 use Bigfoot\Bundle\CoreBundle\Menu\Builder;
 use Bigfoot\Bundle\UserBundle\Entity\RoleMenu;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class RoleMenuManager
 {
@@ -34,13 +36,13 @@ class RoleMenuManager
     /**
      * Constructor
      *
-     * @param Request       $request
-     * @param Builder       $builder
+     * @param RequestStack $requestStack
+     * @param Builder $builder
      * @param EntityManager $entityManager
      */
-    public function __construct(Request $request, Builder $builder, EntityManager $entityManager)
+    public function __construct(RequestStack $requestStack, Builder $builder, EntityManager $entityManager)
     {
-        $this->request       = $request;
+        $this->request       = $requestStack->getCurrentRequest();
         $this->builder       = $builder;
         $this->entityManager = $entityManager;
         $this->repository    = $this->entityManager->getRepository('BigfootUserBundle:RoleMenu');

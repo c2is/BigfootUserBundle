@@ -5,7 +5,6 @@ namespace Bigfoot\Bundle\UserBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -29,22 +28,13 @@ class SecurityController extends BaseController
      */
     public function loginAction(Request $request)
     {
-        $session = $request->getSession();
-
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(
-                SecurityContext::AUTHENTICATION_ERROR
-            );
-        } else {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
-        }
+        $helper = $this->get('security.authentication_utils');
 
         return $this->render(
             $this->getThemeBundle().':user:login.html.twig',
             array(
-                'last_username' => $session->get(SecurityContext::LAST_USERNAME),
-                'error'         => $error,
+                'last_username' => $helper->getLastUsername(),
+                'error'         => $helper->getLastAuthenticationError(),
             )
         );
     }
@@ -75,7 +65,7 @@ class SecurityController extends BaseController
         $form = $this->createForm('admin_forgot_password', new ForgotPasswordModel());
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $user = $form->get('email')->getData();
@@ -123,7 +113,7 @@ class SecurityController extends BaseController
         $form = $this->createForm('admin_reset_password', new ResetPasswordModel());
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $data = $form->getData();

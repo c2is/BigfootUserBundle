@@ -5,8 +5,8 @@ namespace Bigfoot\Bundle\UserBundle\Form\Type;
 use Bigfoot\Bundle\ContextBundle\Service\ContextService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -20,9 +20,9 @@ use Bigfoot\Bundle\UserBundle\Event\UserEvent;
 class UserType extends AbstractType
 {
     /**
-     * @var SecurityContextInterface
+     * @var AuthorizationChecker
      */
-    private $securityContext;
+    private $authorizationChecker;
 
     /**
      * @var array
@@ -37,25 +37,25 @@ class UserType extends AbstractType
     /**
      * Constructor
      *
-     * @param SecurityContextInterface $securityContext
-     * @param ContextService                    $context
+     * @param AuthorizationChecker $securityContext
+     * @param ContextService $context
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
-        SecurityContextInterface $securityContext,
+        AuthorizationChecker $securityContext,
         ContextService $context,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->securityContext = $securityContext;
-        $this->languages       = $context->getValues('language_back');
-        $this->eventDispatcher = $eventDispatcher;
+        $this->authorizationChecker = $securityContext;
+        $this->languages            = $context->getValues('language_back');
+        $this->eventDispatcher      = $eventDispatcher;
     }
 
     /**
      * BuildForm
      *
      * @param  FormBuilderInterface $builder
-     * @param  array                $options
+     * @param  array $options
      *
      * @return null
      */
@@ -84,7 +84,7 @@ class UserType extends AbstractType
                 )
             );
 
-        if ($this->securityContext->isGranted('ROLE_ADMIN')) {
+        if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             $builder
                 ->add(
                     'enabled',
@@ -121,7 +121,7 @@ class UserType extends AbstractType
      *
      * @param OptionsResolverInterface $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(

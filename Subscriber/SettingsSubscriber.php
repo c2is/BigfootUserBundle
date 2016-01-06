@@ -4,7 +4,6 @@ namespace Bigfoot\Bundle\UserBundle\Subscriber;
 
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Bigfoot\Bundle\CoreBundle\Event\SettingsEvent;
 
