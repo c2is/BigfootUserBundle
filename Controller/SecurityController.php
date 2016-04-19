@@ -2,6 +2,8 @@
 
 namespace Bigfoot\Bundle\UserBundle\Controller;
 
+use Bigfoot\Bundle\UserBundle\Form\Type\ForgotPasswordType;
+use Bigfoot\Bundle\UserBundle\Form\Type\ResetPasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -62,7 +64,7 @@ class SecurityController extends BaseController
      */
     public function forgotPasswordAction(Request $request)
     {
-        $form = $this->createForm('admin_forgot_password', new ForgotPasswordModel());
+        $form = $this->createForm(ForgotPasswordType::class, new ForgotPasswordModel());
 
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
@@ -110,7 +112,7 @@ class SecurityController extends BaseController
             return $this->redirect($this->generateUrl('admin_login'));
         }
 
-        $form = $this->createForm('admin_reset_password', new ResetPasswordModel());
+        $form = $this->createForm(ResetPasswordType::class, new ResetPasswordModel());
 
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);

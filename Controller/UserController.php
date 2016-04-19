@@ -2,6 +2,7 @@
 
 namespace Bigfoot\Bundle\UserBundle\Controller;
 
+use Bigfoot\Bundle\UserBundle\Form\Type\UserType;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -64,7 +65,7 @@ class UserController extends CrudController
 
     protected function getFormType()
     {
-        return 'admin_user';
+        return UserType::class;
     }
 
     public function getEntityLabel()

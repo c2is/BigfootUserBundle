@@ -3,6 +3,7 @@
 namespace Bigfoot\Bundle\UserBundle\Manager;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -53,9 +54,9 @@ class UserManager
         $this->tokenGenerator       = $tokenGenerator;
     }
 
-    public function setRequest(Request $request = null)
+    public function setRequest(RequestStack $requestStack)
     {
-        $this->request = $request;
+        $this->request = $requestStack->getCurrentRequest();
     }
 
     public function createUser()

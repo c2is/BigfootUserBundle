@@ -3,7 +3,13 @@
 namespace Bigfoot\Bundle\UserBundle\Form\Type;
 
 use Bigfoot\Bundle\ContextBundle\Service\ContextService;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
@@ -68,7 +74,7 @@ class UserType extends AbstractType
             ->add('username')
             ->add(
                 'email',
-                'text',
+                TextType::class,
                 array(
                     'attr' => array(
                         'class' => 'width-100'
@@ -78,9 +84,9 @@ class UserType extends AbstractType
             ->add('fullName')
             ->add(
                 'locale',
-                'choice',
+                ChoiceType::class,
                 array(
-                    'choices' => $langChoices
+                    'choices' => array_flip($langChoices)
                 )
             );
 
@@ -88,14 +94,14 @@ class UserType extends AbstractType
             $builder
                 ->add(
                     'enabled',
-                    'checkbox',
+                    CheckboxType::class,
                     array(
                         'required' => false
                     )
                 )
                 ->add(
                     'formRoles',
-                    'entity',
+                    EntityType::class,
                     array(
                         'class'    => 'BigfootUserBundle:Role',
                         'multiple' => true,
@@ -106,9 +112,9 @@ class UserType extends AbstractType
         $builder
             ->add(
                 'plainPassword',
-                'repeated',
+                RepeatedType::class,
                 array(
-                    'type'     => 'password',
+                    'type'     => PasswordType::class,
                     'required' => false,
                 )
             );
@@ -119,7 +125,7 @@ class UserType extends AbstractType
     /**
      * SetDefaultOptions
      *
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {

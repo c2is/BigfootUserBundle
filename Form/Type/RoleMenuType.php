@@ -2,7 +2,10 @@
 
 namespace Bigfoot\Bundle\UserBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,37 +16,37 @@ class RoleMenuType extends AbstractType
         $builder
             ->add(
                 'slug',
-                'hidden',
+                HiddenType::class,
                 array(
-                    'label' => '',
+                    'label'    => '',
                     'required' => false,
                 )
             )
             ->add(
                 'label',
-                'text',
+                TextType::class,
                 array(
                     'disabled' => true,
-                    'label' => '',
+                    'label'    => '',
                     'required' => false,
                 )
             )
             ->add(
                 'roles',
-                'entity',
+                EntityType::class,
                 array(
-                    'class'    => 'BigfootUserBundle:Role',
-                    'property' => 'label',
-                    'multiple' => true,
-                    'label' => '',
-                    'required' => false,
+                    'class'        => 'BigfootUserBundle:Role',
+                    'choice_label' => 'label',
+                    'multiple'     => true,
+                    'label'        => '',
+                    'required'     => false,
                 )
             )
             ->add(
                 'level',
-                'hidden',
+                HiddenType::class,
                 array(
-                    'label' => '',
+                    'label'    => '',
                     'required' => false,
                 )
             );
