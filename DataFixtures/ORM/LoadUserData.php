@@ -10,6 +10,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
+    /** @var ContainerInterface  */
     public $container;
 
     public function setContainer(ContainerInterface $container = null)
@@ -27,13 +28,19 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
         $userManager = $this->container->get('bigfoot_user.manager.user');
         $roleAdmin   = $this->getReference('ROLE_ADMIN');
 
+        $localeUser = 'en';
+        $bigfootContextConfig = $this->container->getParameter('bigfoot_context.contexts');
+        if (isset($bigfootContextConfig['language_back']) && isset($bigfootContextConfig['language_back']['default_value'])) {
+            $localeUser = $bigfootContextConfig['language_back']['default_value'];
+        }
+
         $admin = $userManager
             ->createUser()
             ->setUsername('admin')
             ->setPlainPassword('admin')
             ->setFullname('Administrator')
             ->setEmail('admin@c2is.fr')
-            ->setLocale('en')
+            ->setLocale($localeUser)
             ->addRole($roleAdmin);
         $userManager->updatePassword($admin);
 
@@ -43,7 +50,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
             ->setPlainPassword('testAdmin')
             ->setFullname('testAdministrator')
             ->setEmail('testAdmin@c2is.fr')
-            ->setLocale('en');
+            ->setLocale($localeUser);
         $userManager->updatePassword($admin2);
 
         $manager->persist($admin);
