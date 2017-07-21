@@ -1,0 +1,8 @@
+bigfoot_user:
+    settings:
+        label:
+            send_email: "Send an email at subscription"
+
+    role_menu:
+        global:
+            save: "Save"
