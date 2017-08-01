@@ -134,6 +134,19 @@ class User extends BaseUser
     }
 
     /**
+     * Has role
+     *
+     * @param  string  $role
+     * @return boolean
+     */
+    public function hasRole($role)
+    {
+        $roles = $this->getRoles();
+
+        return in_array($role, $roles);
+    }
+
+    /**
      * (PHP 5 &gt;= 5.1.0)<br/>
      * String representation of object
      * @link http://php.net/manual/en/serializable.serialize.php
